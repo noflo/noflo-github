@@ -1,0 +1,25 @@
+#!/usr/bin/env coffee
+octo = require 'octo'
+
+unless process.argv.length >= 4
+  console.log "Usage: noflo-github-api-token username password"
+  process.exit 0
+
+username = process.argv[2]
+password = process.argv[3]
+
+scopes = 'public_repo'
+if process.argv.length is 5
+  scopes = process.argv[4]
+
+api = octo.api()
+api.username username
+api.password password
+request = api.post '/authorizations',
+  note: 'noflo-github',
+  scopes: scopes.split ','
+
+request.on 'success', (res) -> console.log res.body.token
+request.on 'error', (err) -> console.error err.body.message
+
+do request
