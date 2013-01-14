@@ -21,6 +21,7 @@
   },
   "noflo": {
     "components": {
+      "GetRepository": "./components/GetRepository.coffee"
     }
   },
   "scripts": {
