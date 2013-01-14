@@ -21,6 +21,8 @@
   },
   "noflo": {
     "components": {
+      "CreateRepository": "./components/CreateRepository.coffee",
+      "CreateOrgRepository": "./components/CreateOrgRepository.coffee",
       "GetRepository": "./components/GetRepository.coffee"
     }
   },
