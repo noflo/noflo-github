@@ -23,7 +23,8 @@
     "components": {
       "CreateRepository": "./components/CreateRepository.coffee",
       "CreateOrgRepository": "./components/CreateOrgRepository.coffee",
-      "GetRepository": "./components/GetRepository.coffee"
+      "GetRepository": "./components/GetRepository.coffee",
+      "GetCurrentUser": "./components/GetCurrentUser.coffee"
     }
   },
   "scripts": {
