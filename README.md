@@ -6,3 +6,5 @@ This module provides components for the [NoFlo](http://noflojs.org/) flow-based 
 * CreateRepository: Creates a user repository (requires OAuth token)
 * CreateOrgRepository: Creates an organization repository (requires OAuth token)
 * GetRepository: Fetches a repository by its name (e.g. `bergie/create`)
+* GetContents: Retrieves current contents of a file in a repository
+* GetCurrentUser: Retrieves information about the current user
