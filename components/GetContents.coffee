@@ -35,8 +35,10 @@ class GetContents extends noflo.AsyncComponent
         callback new Error 'content not found'
         return
       buf = new Buffer res.body.content, 'base64'
+      @outPorts.out.beginGroup @repo
       @outPorts.out.beginGroup path
       @outPorts.out.send buf.toString 'ascii'
+      @outPorts.out.endGroup()
       @outPorts.out.endGroup()
       @outPorts.out.disconnect()
       callback()
