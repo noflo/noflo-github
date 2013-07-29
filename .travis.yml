@@ -1,9 +1,15 @@
+---
 language: node_js
 node_js:
-  - 0.8
-  - "0.10"
-
+- 0.8
+- '0.10'
 script: npm test
-
 notifications:
-  irc: "irc.freenode.org#fbp"
+  irc: irc.freenode.org#fbp
+env:
+  global:
+    secure: ! 'bSEanHgrQDAhrCokcP6e/mpx2AoMaODXTVa36zslMnmdQ9Jy1cXWrjI2QPI4
+
+      cgUaAjJsVI+rMQSEBoIuN62oBvsJRsnotgpm9xKrL4zHfwLcRyRwRqNIBioH
+
+      e/WptYzWhkif7qpFWyCjEOZ4yy+wCV3p8E4EOQko3xCLAOUduws='
