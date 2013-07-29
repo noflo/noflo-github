@@ -30,6 +30,7 @@ exports['test reading a valid file'] = (test) ->
 
     test.done()
 
+  token.send process.env.GITHUB_API_TOKEN
   repo.send 'bergie/create'
   path.send 'package.json'
 
@@ -43,6 +44,7 @@ exports['test reading a non-existing repository'] = (test) ->
 
     test.done()
 
+  token.send process.env.GITHUB_API_TOKEN
   repo.send 'bergie/xyz123456'
   path.send 'package.json'
 
@@ -56,5 +58,6 @@ exports['test reading a non-existing file'] = (test) ->
 
     test.done()
 
+  token.send process.env.GITHUB_API_TOKEN
   repo.send 'bergie/create'
   path.send 'xyz123456.json'

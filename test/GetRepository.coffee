@@ -23,6 +23,7 @@ exports['test reading a valid repository'] = (test) ->
 
     test.done()
 
+  token.send process.env.GITHUB_API_TOKEN
   ins.send 'bergie/create'
 
 exports['test reading a non-existing repository'] = (test) ->
@@ -35,4 +36,5 @@ exports['test reading a non-existing repository'] = (test) ->
 
     test.done()
 
+  token.send process.env.GITHUB_API_TOKEN
   ins.send 'bergie/xyz123456'

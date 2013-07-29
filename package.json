@@ -2,7 +2,7 @@
   "name": "noflo-github",
   "description": "GitHub service components for the NoFlo flow-based programming environment",
   "author": "Henri Bergius <henri.bergius@iki.fi>",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "licenses": [{
     "type": "MIT",
     "url": "https://github.com/bergie/noflo/raw/master/LICENSE"
@@ -29,7 +29,8 @@
       "CreateOrgRepository": "./components/CreateOrgRepository.coffee",
       "GetRepository": "./components/GetRepository.coffee",
       "GetContents": "./components/GetContents.coffee",
-      "GetCurrentUser": "./components/GetCurrentUser.coffee"
+      "GetCurrentUser": "./components/GetCurrentUser.coffee",
+      "GetStargazers": "./components/GetStargazers.coffee"
     }
   },
   "scripts": {
