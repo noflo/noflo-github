@@ -20,7 +20,9 @@ exports['test reading a valid repository'] = (test) ->
     test.ok data, "We need to get a repository object"
     test.ok data.full_name, "We need to get the repository name"
     test.equal data.full_name, 'bergie/create'
-
+    test.done()
+  err.once 'data', (data) ->
+    test.ok false, 'We should have gotten a result'
     test.done()
 
   token.send process.env.GITHUB_API_TOKEN
@@ -33,7 +35,6 @@ exports['test reading a non-existing repository'] = (test) ->
     test.ok data, 'Errors are objects'
     test.ok data.message, 'There needs to be an error message'
     test.equal data.message, 'Not Found'
-
     test.done()
 
   token.send process.env.GITHUB_API_TOKEN

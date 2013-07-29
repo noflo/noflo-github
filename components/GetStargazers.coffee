@@ -20,7 +20,6 @@ class GetStargazers extends noflo.AsyncComponent
   doAsync: (repository, callback) ->
     api = octo.api()
     api.token @token if @token
-
     request = api.get "/repos/#{repository}/stargazers"
     request.on 'success', (res) =>
       @outPorts.out.beginGroup repository
@@ -30,7 +29,6 @@ class GetStargazers extends noflo.AsyncComponent
       @outPorts.out.disconnect()
       callback()
     request.on 'error', (err) =>
-      @outPorts.out.disconnect()
       callback err.body
     @outPorts.out.connect()
     do request

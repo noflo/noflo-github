@@ -18,12 +18,17 @@ exports['test reading for valid repo'] = (test) ->
 
   expected = 200
   received = 0
+  failed = false
   out.on 'data', (data) ->
     received++
     test.ok data, 'We should receive user objects'
     test.ok data.login, 'Users should have logins'
   out.once 'disconnect', ->
     test.ok (received >= expected), 'We should get at least 200 stargazers'
+    test.done() unless failed
+  err.once 'data', (data) ->
+    test.ok false, "We should have gotten a result. Received #{received} before this"
+    failed = true
     test.done()
 
   token.send process.env.GITHUB_API_TOKEN

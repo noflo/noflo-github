@@ -27,7 +27,9 @@ exports['test reading a valid file'] = (test) ->
       return test.done()
     test.ok packagedata.name
     test.equal packagedata.name, 'create'
-
+    test.done()
+  err.once 'data', (data) ->
+    test.ok false, 'We should have gotten a result'
     test.done()
 
   token.send process.env.GITHUB_API_TOKEN
