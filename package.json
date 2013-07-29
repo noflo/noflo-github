@@ -30,6 +30,7 @@
       "GetRepository": "./components/GetRepository.coffee",
       "GetContents": "./components/GetContents.coffee",
       "GetCurrentUser": "./components/GetCurrentUser.coffee",
+      "GetUser": "./components/GetUser.coffee",
       "GetStargazers": "./components/GetStargazers.coffee"
     }
   },
