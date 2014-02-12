@@ -5,17 +5,18 @@ unless noflo.isBrowser()
   atob = require 'atob'
 
 class GetContents extends noflo.AsyncComponent
+  description: 'Get contents of a file or a directory'
   constructor: ->
     @token = null
     @repo = null
 
     @inPorts =
-      repository: new noflo.Port
-      path: new noflo.Port
-      token: new noflo.Port
+      repository: new noflo.Port 'string'
+      path: new noflo.Port 'string'
+      token: new noflo.Port 'string'
     @outPorts =
-      out: new noflo.Port
-      error: new noflo.Port
+      out: new noflo.Port 'object'
+      error: new noflo.Port 'object'
 
     @inPorts.repository.on 'data', (data) =>
       @repo = data
