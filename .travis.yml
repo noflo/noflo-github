@@ -1,11 +1,9 @@
 ---
 language: node_js
 node_js:
-- 0.8
-- '0.10'
-script: npm test
-notifications:
-  irc: irc.freenode.org#fbp
+- "0.10"
+before_script:
+  - npm install -g grunt-cli
 env:
   global:
     secure: ! 'bSEanHgrQDAhrCokcP6e/mpx2AoMaODXTVa36zslMnmdQ9Jy1cXWrjI2QPI4

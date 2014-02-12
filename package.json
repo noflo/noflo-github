@@ -43,8 +43,7 @@
     }
   },
   "scripts": {
-    "pretest": "./node_modules/.bin/coffeelint -r components",
-    "test": "./node_modules/.bin/nodeunit test"
+    "test": "grunt test"
   },
   "bin": {
     "noflo-github-auth-token": "./bin/noflo-github-auth-token"
