@@ -11,11 +11,13 @@ class GetContents extends noflo.AsyncComponent
   constructor: ->
     @token = null
     @repo = null
+    @sendRepo = true
 
     @inPorts =
       repository: new noflo.Port 'string'
       path: new noflo.Port 'string'
       token: new noflo.Port 'string'
+      sendrepo: new noflo.Port 'boolean'
     @outPorts =
       out: new noflo.Port 'string'
       files: new noflo.Port 'object'
@@ -23,6 +25,8 @@ class GetContents extends noflo.AsyncComponent
 
     @inPorts.repository.on 'data', (data) =>
       @repo = data
+
+    @inPorts.sendrepo.on 'data', (@sendRepo) =>
 
     @inPorts.token.on 'data', (data) =>
       @token = data
@@ -52,11 +56,11 @@ class GetContents extends noflo.AsyncComponent
         @outPorts.files.disconnect()
         callback()
         return
-      @outPorts.out.beginGroup repo
+      @outPorts.out.beginGroup repo if @sendRepo
       @outPorts.out.beginGroup path
       @outPorts.out.send atob res.body.content.replace /\s/g, ''
       @outPorts.out.endGroup()
-      @outPorts.out.endGroup()
+      @outPorts.out.endGroup() if @sendRepo
       @outPorts.out.disconnect()
       callback()
     request.on 'error', (err) =>
