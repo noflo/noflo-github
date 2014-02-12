@@ -18,7 +18,8 @@
   },
   "dependencies": {
     "noflo": "0.4.x",
-    "octo": "0.1.x"
+    "octo": "0.1.x",
+    "atob": "~1.1.0"
   },
   "devDependencies": {
     "grunt": "~0.4.2",

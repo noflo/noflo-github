@@ -1,6 +1,9 @@
 noflo = require 'noflo'
 octo = require 'octo'
 
+unless noflo.isBrowser()
+  atob = require 'atob'
+
 class GetContents extends noflo.AsyncComponent
   constructor: ->
     @token = null
@@ -35,10 +38,9 @@ class GetContents extends noflo.AsyncComponent
       unless res.body.content
         callback new Error 'content not found'
         return
-      buf = new Buffer res.body.content, 'base64'
       @outPorts.out.beginGroup repo
       @outPorts.out.beginGroup path
-      @outPorts.out.send buf.toString 'ascii'
+      @outPorts.out.send atob res.body.content
       @outPorts.out.endGroup()
       @outPorts.out.endGroup()
       @outPorts.out.disconnect()
