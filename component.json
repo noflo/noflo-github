@@ -17,6 +17,9 @@
     "components/GetUser.coffee",
     "components/GetStargazers.coffee"
   ],
+  "json": [
+    "component.json"
+  ],
   "noflo": {
     "icon": "github",
     "components": {
