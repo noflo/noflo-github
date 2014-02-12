@@ -17,7 +17,8 @@ class GetContents extends noflo.AsyncComponent
       path: new noflo.Port 'string'
       token: new noflo.Port 'string'
     @outPorts =
-      out: new noflo.Port 'object'
+      out: new noflo.Port 'string'
+      files: new noflo.Port 'object'
       error: new noflo.Port 'object'
 
     @inPorts.repository.on 'data', (data) =>
@@ -39,7 +40,17 @@ class GetContents extends noflo.AsyncComponent
     request = api.get "/repos/#{repo}/contents/#{path}"
     request.on 'success', (res) =>
       unless res.body.content
-        callback new Error 'content not found'
+        unless toString.call(res.body) is '[object Array]'
+          callback new Error 'content not found'
+          return
+        unless @outPorts.files.isAttached()
+          callback new Error 'content not found'
+          return
+        # Directory, send file paths
+        for file in res.body
+          @outPorts.files.send file
+        @outPorts.files.disconnect()
+        callback()
         return
       @outPorts.out.beginGroup repo
       @outPorts.out.beginGroup path
