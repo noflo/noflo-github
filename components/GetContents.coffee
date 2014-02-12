@@ -43,7 +43,7 @@ class GetContents extends noflo.AsyncComponent
         return
       @outPorts.out.beginGroup repo
       @outPorts.out.beginGroup path
-      @outPorts.out.send atob res.body.content
+      @outPorts.out.send atob res.body.content.replace /\s/g, ''
       @outPorts.out.endGroup()
       @outPorts.out.endGroup()
       @outPorts.out.disconnect()
