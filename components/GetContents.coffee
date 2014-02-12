@@ -3,6 +3,8 @@ octo = require 'octo'
 
 unless noflo.isBrowser()
   atob = require 'atob'
+else
+  atob = window.atob
 
 class GetContents extends noflo.AsyncComponent
   description: 'Get contents of a file or a directory'
