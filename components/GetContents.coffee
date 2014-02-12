@@ -51,8 +51,10 @@ class GetContents extends noflo.AsyncComponent
           callback new Error 'content not found'
           return
         # Directory, send file paths
+        @outPorts.files.beginGroup repo if @sendRepo
         for file in res.body
           @outPorts.files.send file
+        @outPorts.files.endGroup() if @sendRepo
         @outPorts.files.disconnect()
         callback()
         return
