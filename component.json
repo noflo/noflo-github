@@ -1,0 +1,32 @@
+{
+  "name": "noflo-github",
+  "description": "GitHub service components for the NoFlo flow-based programming environment",
+  "author": "Henri Bergius <henri.bergius@iki.fi>",
+  "repo": "noflo/noflo-github",
+  "dependencies": {
+    "noflo/noflo": "*",
+    "bergie/octo": "*"
+  },
+  "scripts": [
+    "index.js",
+    "components/CreateRepository.coffee",
+    "components/CreateOrgRepository.coffee",
+    "components/GetRepository.coffee",
+    "components/GetContents.coffee",
+    "components/GetCurrentUser.coffee",
+    "components/GetUser.coffee",
+    "components/GetStargazers.coffee"
+  ],
+  "noflo": {
+    "icon": "github",
+    "components": {
+      "CreateRepository": "components/CreateRepository.coffee",
+      "CreateOrgRepository": "components/CreateOrgRepository.coffee",
+      "GetRepository": "components/GetRepository.coffee",
+      "GetContents": "components/GetContents.coffee",
+      "GetCurrentUser": "components/GetCurrentUser.coffee",
+      "GetUser": "components/GetUser.coffee",
+      "GetStargazers": "components/GetStargazers.coffee"
+    }
+  }
+}
