@@ -83,7 +83,7 @@ class SetContents extends noflo.AsyncComponent
       createReq.on 'error', (error) =>
         @outPorts.out.disconnect()
         callback err.body
-      do updateReq
+      do createReq
     
     @outPorts.out.connect()
     do shaReq
