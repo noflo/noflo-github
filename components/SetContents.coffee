@@ -17,6 +17,7 @@ class SetContents extends noflo.AsyncComponent
 
     @inPorts =
       in: new noflo.Port 'string'
+      token: new noflo.Port 'string'
       message: new noflo.Port 'string'
       repository: new noflo.Port 'string'
       path: new noflo.Port 'string'
@@ -24,6 +25,7 @@ class SetContents extends noflo.AsyncComponent
       out: new noflo.Port 'object'
       error: new noflo.Port 'object'
 
+    @inPorts.token.on 'data', (@token) =>
     @inPorts.message.on 'data', (@message) =>
     @inPorts.repository.on 'data', (@repo) =>
     @inPorts.path.on 'data', (@path) =>
