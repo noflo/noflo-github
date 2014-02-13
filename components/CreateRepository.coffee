@@ -6,11 +6,11 @@ class CreateRepository extends noflo.AsyncComponent
     @token = null
 
     @inPorts =
-      in: new noflo.Port
-      token: new noflo.Port
+      in: new noflo.Port 'string'
+      token: new noflo.Port 'string'
     @outPorts =
-      out: new noflo.Port
-      error: new noflo.Port
+      out: new noflo.Port 'object'
+      error: new noflo.Port 'string'
 
     @inPorts.token.on 'data', (data) =>
       @token = data

@@ -15,7 +15,8 @@
     "components/GetContents.coffee",
     "components/GetCurrentUser.coffee",
     "components/GetUser.coffee",
-    "components/GetStargazers.coffee"
+    "components/GetStargazers.coffee",
+    "components/SetContents.coffee"
   ],
   "json": [
     "component.json"
@@ -29,7 +30,8 @@
       "GetContents": "components/GetContents.coffee",
       "GetCurrentUser": "components/GetCurrentUser.coffee",
       "GetUser": "components/GetUser.coffee",
-      "GetStargazers": "components/GetStargazers.coffee"
+      "GetStargazers": "components/GetStargazers.coffee",
+      "SetContents": "components/SetContents.coffee"
     }
   }
 }

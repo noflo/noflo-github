@@ -19,7 +19,8 @@
   "dependencies": {
     "noflo": "0.4.x",
     "octo": "0.1.x",
-    "atob": "~1.1.0"
+    "atob": "~1.1.0",
+    "btoa": "~1.1.1"
   },
   "devDependencies": {
     "grunt": "~0.4.2",
@@ -40,7 +41,8 @@
       "GetContents": "./components/GetContents.coffee",
       "GetCurrentUser": "./components/GetCurrentUser.coffee",
       "GetUser": "./components/GetUser.coffee",
-      "GetStargazers": "./components/GetStargazers.coffee"
+      "GetStargazers": "./components/GetStargazers.coffee",
+      "SetContents": "components/SetContents.coffee"
     }
   },
   "scripts": {
