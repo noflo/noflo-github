@@ -24,13 +24,13 @@
   "noflo": {
     "icon": "github",
     "components": {
-      "CreateRepository": "components/CreateRepository.coffee",
       "CreateOrgRepository": "components/CreateOrgRepository.coffee",
-      "GetRepository": "components/GetRepository.coffee",
+      "CreateRepository": "components/CreateRepository.coffee",
       "GetContents": "components/GetContents.coffee",
       "GetCurrentUser": "components/GetCurrentUser.coffee",
-      "GetUser": "components/GetUser.coffee",
+      "GetRepository": "components/GetRepository.coffee",
       "GetStargazers": "components/GetStargazers.coffee",
+      "GetUser": "components/GetUser.coffee",
       "SetContents": "components/SetContents.coffee"
     }
   }
