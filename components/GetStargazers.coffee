@@ -21,7 +21,11 @@ class GetStargazers extends noflo.AsyncComponent
     api = octo.api()
     api.token @token if @token
     request = api.get "/repos/#{repository}/stargazers"
+    request.perpage 30
     request.on 'success', (res) =>
+      unless res.body.length
+        @outPorts.out.disconnect()
+        return
       @outPorts.out.beginGroup repository
       @outPorts.out.send user for user in res.body
       @outPorts.out.endGroup()
