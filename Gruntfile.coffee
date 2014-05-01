@@ -14,7 +14,7 @@ module.exports = ->
     noflo_browser:
       build:
         files:
-          'browser/strings.js': ['component.json']
+          'browser/noflo-github.js': ['component.json']
 
     # JavaScript minification for the browser
     uglify:
