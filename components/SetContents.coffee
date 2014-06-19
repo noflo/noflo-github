@@ -6,86 +6,73 @@ unless noflo.isBrowser()
 else
   btoa = window.btoa
 
-class SetContents extends noflo.AsyncComponent
-  description: 'Create or update a file in the repository'
+exports.getComponent = ->
+  c = new noflo.Component
+  c.description = 'Create or update a file in the repository'
+  c.token = null
+  c.inPorts.add 'in',
+    datatype: 'string'
+    description: 'File contents to push'
+  c.inPorts.add 'message',
+    datatype: 'string'
+    description: 'Commit message'
+  c.inPorts.add 'repository',
+    datatype: 'string'
+    description: 'Repository path'
+  c.inPorts.add 'token',
+    datatype: 'string'
+    description: 'GitHub API token'
+    process: (event, payload) ->
+      c.token = payload if event is 'data'
+  c.outPorts.add 'out',
+    datatype: 'string'
+  c.outPorts.add 'error',
+    datatype: 'object'
+    required: false
 
-  constructor: ->
-    @token = null
-    @message = null
-    @repo = null
-    @path = null
-
-    @inPorts =
-      in: new noflo.Port 'string'
-      token: new noflo.Port 'string'
-      message: new noflo.Port 'string'
-      repository: new noflo.Port 'string'
-      path: new noflo.Port 'string'
-    @outPorts =
-      out: new noflo.Port 'object'
-      error: new noflo.Port 'object'
-
-    @inPorts.token.on 'data', (@token) =>
-    @inPorts.message.on 'data', (@message) =>
-    @inPorts.repository.on 'data', (@repo) =>
-    @inPorts.path.on 'data', (@path) =>
-
-    super 'in'
-
-  doAsync: (contents, callback) ->
-    unless @repo
-      callback new Error 'repository name required'
-    unless @path
-      callback new Error 'file path required'
-    @message = '' unless @message
-
-    repo = @repo
-    path = @path
-    message = @message
-
+  noflo.helpers.WirePattern c,
+    in: ['in', 'message', 'repository', 'path']
+    out: 'out'
+    async: true
+    forwardGroups: true
+  , (data, groups, out, callback) ->
     api = octo.api()
-    api.token @token if @token
+    api.token c.token if c.token
 
     # Start by getting the SHA
-    shaReq = api.get "/repos/#{repo}/contents/#{path}"
+    shaReq = api.get "/repos/#{data.repository}/contents/#{data.path}"
     shaReq.on 'success', (shaRes) =>
       # SHA found, update
-      updateReq = api.put "/repos/#{repo}/contents/#{path}",
-        path: path
-        message: message
-        content: btoa contents
+      updateReq = api.put "/repos/#{data.repository}/contents/#{data.path}",
+        path: data.path
+        message: data.message
+        content: btoa data.in
         sha: shaRes.body.sha
       updateReq.on 'success', (updateRes) =>
         # File was updated
-        @outPorts.out.beginGroup path
-        @outPorts.out.send updateRes.sha
-        @outPorts.out.endGroup()
-        @outPorts.out.disconnect()
+        out.beginGroup data.path
+        out.send updateRes.sha
+        out.endGroup()
         do callback
       updateReq.on 'error', (error) =>
-        @outPorts.out.disconnect()
         callback err.body
       do updateReq
 
     shaReq.on 'error', =>
       # No SHA found, create as new file
-      createReq = api.put "/repos/#{repo}/contents/#{path}",
-        path: path
-        message: message
-        content: btoa contents
+      updateReq = api.put "/repos/#{data.repository}/contents/#{data.path}",
+        path: data.path
+        message: data.message
+        content: btoa data.in
       createReq.on 'success', (createRes) =>
-        # File was updated
-        @outPorts.out.beginGroup path
-        @outPorts.out.send createRes.sha
-        @outPorts.out.endGroup()
-        @outPorts.out.disconnect()
+        # File was created
+        out.beginGroup data.path
+        out.send createRes.sha
+        out.endGroup()
         do callback
       createReq.on 'error', (error) =>
-        @outPorts.out.disconnect()
         callback err.body
       do createReq
-    
-    @outPorts.out.connect()
     do shaReq
 
-exports.getComponent = -> new SetContents
+  c
