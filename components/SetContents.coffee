@@ -54,27 +54,27 @@ exports.getComponent = ->
       updateReq.on 'success', (updateRes) ->
         # File was updated
         out.beginGroup data.path
-        out.send updateRes.sha
+        out.send updateRes.body.commit.sha
         out.endGroup()
         do callback
       updateReq.on 'error', (error) ->
-        callback err.body
+        callback error.body
       do updateReq
 
     shaReq.on 'error', ->
       # No SHA found, create as new file
-      updateReq = api.put "/repos/#{data.repository}/contents/#{data.path}",
+      createReq = api.put "/repos/#{data.repository}/contents/#{data.path}",
         path: data.path
         message: data.message
         content: btoa data.in
       createReq.on 'success', (createRes) ->
         # File was created
         out.beginGroup data.path
-        out.send createRes.sha
+        out.send createRes.body.commit.sha
         out.endGroup()
         do callback
       createReq.on 'error', (error) ->
-        callback err.body
+        callback error.body
       do createReq
     do shaReq
 

@@ -18,7 +18,7 @@
   },
   "dependencies": {
     "noflo": "~0.5.4",
-    "octo": "git://github.com/bergie/octo.git#patch-2",
+    "octo": "git://github.com/bergie/octo.git#patched",
     "atob": "~1.1.0",
     "btoa": "~1.1.1"
   },
