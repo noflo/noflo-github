@@ -19,6 +19,9 @@ exports.getComponent = ->
   c.inPorts.add 'repository',
     datatype: 'string'
     description: 'Repository path'
+  c.inPorts.add 'path',
+    datatype: 'string'
+    description: 'File path inside repository'
   c.inPorts.add 'token',
     datatype: 'string'
     description: 'GitHub API token'
@@ -41,36 +44,36 @@ exports.getComponent = ->
 
     # Start by getting the SHA
     shaReq = api.get "/repos/#{data.repository}/contents/#{data.path}"
-    shaReq.on 'success', (shaRes) =>
+    shaReq.on 'success', (shaRes) ->
       # SHA found, update
       updateReq = api.put "/repos/#{data.repository}/contents/#{data.path}",
         path: data.path
         message: data.message
         content: btoa data.in
         sha: shaRes.body.sha
-      updateReq.on 'success', (updateRes) =>
+      updateReq.on 'success', (updateRes) ->
         # File was updated
         out.beginGroup data.path
         out.send updateRes.sha
         out.endGroup()
         do callback
-      updateReq.on 'error', (error) =>
+      updateReq.on 'error', (error) ->
         callback err.body
       do updateReq
 
-    shaReq.on 'error', =>
+    shaReq.on 'error', ->
       # No SHA found, create as new file
       updateReq = api.put "/repos/#{data.repository}/contents/#{data.path}",
         path: data.path
         message: data.message
         content: btoa data.in
-      createReq.on 'success', (createRes) =>
+      createReq.on 'success', (createRes) ->
         # File was created
         out.beginGroup data.path
         out.send createRes.sha
         out.endGroup()
         do callback
-      createReq.on 'error', (error) =>
+      createReq.on 'error', (error) ->
         callback err.body
       do createReq
     do shaReq

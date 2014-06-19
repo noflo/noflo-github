@@ -6,69 +6,69 @@ unless noflo.isBrowser()
 else
   atob = window.atob
 
-class GetContents extends noflo.AsyncComponent
-  description: 'Get contents of a file or a directory'
-  constructor: ->
-    @token = null
-    @repo = null
-    @sendRepo = true
+exports.getComponent = ->
+  c = new noflo.Component
+  c.description = 'Get contents of a file or a directory'
+  c.token = null
+  c.sendRepo = true
+  c.inPorts.add 'repository',
+    datatype: 'string'
+    description: 'Repository path'
+  c.inPorts.add 'path',
+    datatype: 'string'
+    description: 'File path inside repository'
+  c.inPorts.add 'token',
+    datatype: 'string'
+    description: 'GitHub API token'
+    process: (event, payload) ->
+      c.token = payload if event is 'data'
+  c.inPorts.add 'sendrepo',
+    datatype: 'boolean'
+    description: 'Whether to send repository path as group'
+    default: true
+    process: (event, payload) ->
+      return unless event is 'data'
+      c.sendRepo = String(payload) is 'true'
+  c.outPorts.add 'out',
+    datatype: 'string'
+  c.outPorts.add 'files',
+    datatype: 'object'
+    required: false
+  c.outPorts.add 'error',
+    datatype: 'object'
+    required: false
 
-    @inPorts =
-      repository: new noflo.Port 'string'
-      path: new noflo.Port 'string'
-      token: new noflo.Port 'string'
-      sendrepo: new noflo.Port 'boolean'
-    @outPorts =
-      out: new noflo.Port 'string'
-      files: new noflo.Port 'object'
-      error: new noflo.Port 'object'
-
-    @inPorts.repository.on 'data', (data) =>
-      @repo = data
-
-    @inPorts.sendrepo.on 'data', (@sendRepo) =>
-
-    @inPorts.token.on 'data', (data) =>
-      @token = data
-
-    super 'path'
-
-  doAsync: (path, callback) ->
+  noflo.helpers.WirePattern c,
+    in: ['repository', 'path']
+    out: 'out'
+    async: true
+    forwardGroups: true
+  , (data, groups, out, callback) ->
     api = octo.api()
-    api.token @token if @token
+    api.token c.token if c.token
 
-    unless @repo
-      callback new Error 'repository name required'
-    repo = @repo
-
-    request = api.get "/repos/#{repo}/contents/#{path}"
-    request.on 'success', (res) =>
+    request = api.get "/repos/#{data.repository}/contents/#{data.path}"
+    request.on 'success', (res) ->
       unless res.body.content
         unless toString.call(res.body) is '[object Array]'
           callback new Error 'content not found'
           return
-        unless @outPorts.files.isAttached()
-          callback new Error 'content not found'
-          return
         # Directory, send file paths
-        @outPorts.files.beginGroup repo if @sendRepo
+        c.outPorts.files.beginGroup data.repository if c.sendRepo
         for file in res.body
-          @outPorts.files.send file
-        @outPorts.files.endGroup() if @sendRepo
-        @outPorts.files.disconnect()
-        callback()
+          c.outPorts.files.send file
+        c.outPorts.files.endGroup() if c.sendRepo
+        c.outPorts.files.disconnect()
+        do callback
         return
-      @outPorts.out.beginGroup repo if @sendRepo
-      @outPorts.out.beginGroup path
-      @outPorts.out.send atob res.body.content.replace /\s/g, ''
-      @outPorts.out.endGroup()
-      @outPorts.out.endGroup() if @sendRepo
-      @outPorts.out.disconnect()
-      callback()
+      out.beginGroup data.repository if c.sendRepo
+      out.beginGroup data.path
+      out.send atob res.body.content.replace /\s/g, ''
+      out.endGroup()
+      out.endGroup() if c.sendRepo
+      do callback
     request.on 'error', (err) =>
-      @outPorts.out.disconnect()
       callback err.body
-    @outPorts.out.connect()
     do request
 
-exports.getComponent = -> new GetContents
+  c
