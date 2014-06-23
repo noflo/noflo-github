@@ -1,44 +1,43 @@
 noflo = require 'noflo'
 octo = require 'octo'
 
-class CreateRepository extends noflo.AsyncComponent
-  constructor: ->
-    @token = null
+exports.getComponent = ->
+  c = new noflo.Component
+  c.description = 'Create a repository'
+  c.inPorts.add 'in',
+    datatype: 'string'
+    description: 'Repository name'
+  c.inPorts.add 'token',
+    datatype: 'string'
+    description: 'GitHub API token'
+  c.outPorts.add 'out',
+    datatype: 'object'
+  c.outPorts.add 'error',
+    datatype: 'object'
+    required: false
 
-    @inPorts =
-      in: new noflo.Port 'string'
-      token: new noflo.Port 'string'
-    @outPorts =
-      out: new noflo.Port 'object'
-      error: new noflo.Port 'string'
-
-    @inPorts.token.on 'data', (data) =>
-      @token = data
-
-    super()
-
-  doAsync: (repo, callback) ->
+  noflo.helpers.WirePattern c,
+    in: ['in']
+    params: ['token']
+    out: 'out'
+    async: true
+    forwardGroups: true
+  , (data, groups, out, callback) ->
     api = octo.api()
-
-    unless @token
-      callback new Error 'token required'
-      return
-    api.token @token
+    unless c.params.token
+      return callback new Error 'token required'
+    api.token c.params.token
 
     request = api.post '/user/repos',
-      name: repo
+      name: data
 
-    request.on 'success', (res) =>
-      @outPorts.out.beginGroup repo
-      @outPorts.out.send res.body
-      @outPorts.out.endGroup()
-      @outPorts.out.disconnect()
+    request.on 'success', (res) ->
+      out.beginGroup data
+      out.send res.body
+      out.endGroup()
       callback()
-    request.on 'error', (err) =>
-      @outPorts.out.disconnect()
+    request.on 'error', (err) ->
       callback err.body
-
-    @outPorts.out.connect()
     do request
 
-exports.getComponent = -> new CreateRepository
+  c

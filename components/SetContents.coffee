@@ -9,7 +9,6 @@ else
 exports.getComponent = ->
   c = new noflo.Component
   c.description = 'Create or update a file in the repository'
-  c.token = null
   c.inPorts.add 'in',
     datatype: 'string'
     description: 'File contents to push'
@@ -25,8 +24,6 @@ exports.getComponent = ->
   c.inPorts.add 'token',
     datatype: 'string'
     description: 'GitHub API token'
-    process: (event, payload) ->
-      c.token = payload if event is 'data'
   c.outPorts.add 'out',
     datatype: 'string'
   c.outPorts.add 'error',
@@ -35,12 +32,13 @@ exports.getComponent = ->
 
   noflo.helpers.WirePattern c,
     in: ['in', 'message', 'repository', 'path']
+    params: ['token']
     out: 'out'
     async: true
     forwardGroups: true
   , (data, groups, out, callback) ->
     api = octo.api()
-    api.token c.token if c.token
+    api.token c.params.token if c.params.token
 
     # Start by getting the SHA
     shaReq = api.get "/repos/#{data.repository}/contents/#{data.path}"

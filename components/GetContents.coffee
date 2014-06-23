@@ -9,7 +9,6 @@ else
 exports.getComponent = ->
   c = new noflo.Component
   c.description = 'Get contents of a file or a directory'
-  c.token = null
   c.sendRepo = true
   c.inPorts.add 'repository',
     datatype: 'string'
@@ -20,8 +19,6 @@ exports.getComponent = ->
   c.inPorts.add 'token',
     datatype: 'string'
     description: 'GitHub API token'
-    process: (event, payload) ->
-      c.token = payload if event is 'data'
   c.inPorts.add 'sendrepo',
     datatype: 'boolean'
     description: 'Whether to send repository path as group'
@@ -40,12 +37,13 @@ exports.getComponent = ->
 
   noflo.helpers.WirePattern c,
     in: ['repository', 'path']
+    params: ['token']
     out: 'out'
     async: true
     forwardGroups: true
   , (data, groups, out, callback) ->
     api = octo.api()
-    api.token c.token if c.token
+    api.token c.params.token if c.params.token
 
     request = api.get "/repos/#{data.repository}/contents/#{data.path}"
     request.on 'success', (res) ->
@@ -67,7 +65,7 @@ exports.getComponent = ->
       out.endGroup()
       out.endGroup() if c.sendRepo
       do callback
-    request.on 'error', (err) =>
+    request.on 'error', (err) ->
       callback err.body
     do request
 

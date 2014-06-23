@@ -23,4 +23,5 @@ exports['test creating without token'] = (test) ->
 
     test.done()
 
+  token.send null
   ins.send 'xyz123456'

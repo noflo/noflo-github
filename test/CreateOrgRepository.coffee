@@ -15,18 +15,6 @@ setupComponent = ->
   c.outPorts.error.attach err
   [c, ins, org, token, out, err]
 
-exports['test creating without organization'] = (test) ->
-  [c, ins, org, token, out, err] = setupComponent()
-
-  err.once 'data', (data) ->
-    test.ok data, 'Errors are objects'
-    test.ok data.message, 'There needs to be an error message'
-    test.equal data.message, 'organization name required'
-
-    test.done()
-
-  ins.send 'xyz123456'
-
 exports['test creating without token'] = (test) ->
   [c, ins, org, token, out, err] = setupComponent()
 
@@ -37,5 +25,6 @@ exports['test creating without token'] = (test) ->
 
     test.done()
 
+  token.send null
   org.send 'foo'
   ins.send 'xyz123456'
