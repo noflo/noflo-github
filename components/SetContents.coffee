@@ -8,6 +8,7 @@ else
 
 exports.getComponent = ->
   c = new noflo.Component
+  c.branch = 'master'
   c.description = 'Create or update a file in the repository'
   c.inPorts.add 'in',
     datatype: 'string'
@@ -21,6 +22,12 @@ exports.getComponent = ->
   c.inPorts.add 'path',
     datatype: 'string'
     description: 'File path inside repository'
+  c.inPorts.add 'branch',
+    datatype: 'string'
+    description: 'Git branch to use'
+    default: 'master'
+    process: (event, payload) ->
+      c.branch = payload if event is 'data'
   c.inPorts.add 'token',
     datatype: 'string'
     description: 'GitHub API token'
@@ -41,7 +48,7 @@ exports.getComponent = ->
     api.token c.params.token if c.params.token
 
     # Start by getting the SHA
-    shaReq = api.get "/repos/#{data.repository}/contents/#{data.path}"
+    shaReq = api.get "/repos/#{data.repository}/contents/#{data.path}?ref=#{c.branch}"
     shaReq.on 'success', (shaRes) ->
       # SHA found, update
       updateReq = api.put "/repos/#{data.repository}/contents/#{data.path}",
@@ -49,6 +56,7 @@ exports.getComponent = ->
         message: data.message
         content: btoa data.in
         sha: shaRes.body.sha
+        branch: c.branch
       updateReq.on 'success', (updateRes) ->
         # File was updated
         out.beginGroup data.path
@@ -65,6 +73,7 @@ exports.getComponent = ->
         path: data.path
         message: data.message
         content: btoa data.in
+        branch: c.branch
       createReq.on 'success', (createRes) ->
         # File was created
         out.beginGroup data.path

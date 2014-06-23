@@ -8,6 +8,7 @@ else
 
 exports.getComponent = ->
   c = new noflo.Component
+  c.ref = 'master'
   c.description = 'Get contents of a file or a directory'
   c.sendRepo = true
   c.inPorts.add 'repository',
@@ -16,6 +17,12 @@ exports.getComponent = ->
   c.inPorts.add 'path',
     datatype: 'string'
     description: 'File path inside repository'
+  c.inPorts.add 'ref',
+    datatype: 'string'
+    default: 'master'
+    description: 'The name of the commit/branch/tag'
+    process: (event, payload) ->
+      c.ref = payload if event is 'data'
   c.inPorts.add 'token',
     datatype: 'string'
     description: 'GitHub API token'
@@ -45,7 +52,7 @@ exports.getComponent = ->
     api = octo.api()
     api.token c.params.token if c.params.token
 
-    request = api.get "/repos/#{data.repository}/contents/#{data.path}"
+    request = api.get "/repos/#{data.repository}/contents/#{data.path}?ref=#{c.ref}"
     request.on 'success', (res) ->
       unless res.body.content
         unless toString.call(res.body) is '[object Array]'
