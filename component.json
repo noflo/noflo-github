@@ -16,7 +16,8 @@
     "components/GetCurrentUser.coffee",
     "components/GetUser.coffee",
     "components/GetStargazers.coffee",
-    "components/SetContents.coffee"
+    "components/SetContents.coffee",
+    "components/CreateOrphanBranch.coffee"
   ],
   "json": [
     "component.json"
@@ -25,6 +26,7 @@
     "icon": "github",
     "components": {
       "CreateOrgRepository": "components/CreateOrgRepository.coffee",
+      "CreateOrphanBranch": "components/CreateOrphanBranch.coffee",
       "CreateRepository": "components/CreateRepository.coffee",
       "GetContents": "components/GetContents.coffee",
       "GetCurrentUser": "components/GetCurrentUser.coffee",
