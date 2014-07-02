@@ -25,7 +25,6 @@ exports.getComponent = ->
   c.inPorts.add 'branch',
     datatype: 'string'
     description: 'Git branch to use'
-    default: 'master'
     process: (event, payload) ->
       c.branch = payload if event is 'data'
   c.inPorts.add 'token',

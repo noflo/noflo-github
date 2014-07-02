@@ -19,7 +19,6 @@ exports.getComponent = ->
     description: 'File path inside repository'
   c.inPorts.add 'ref',
     datatype: 'string'
-    default: 'master'
     description: 'The name of the commit/branch/tag'
     process: (event, payload) ->
       c.ref = payload if event is 'data'
