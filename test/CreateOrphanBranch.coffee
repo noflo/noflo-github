@@ -1,5 +1,6 @@
 component = require "../components/CreateOrphanBranch"
 socket = require('noflo').internalSocket
+octo = require 'octo'
 
 setupComponent = ->
   c = component.getComponent()
@@ -46,3 +47,47 @@ exports['test creating an existing branch'] = (test) ->
   token.send process.env.GITHUB_API_TOKEN
   repo.send 'the-domains/example.net'
   branch.send 'master'
+
+
+exports['test creating a branch to a newly-initialized repo'] = (test) ->
+  [c, branch, repo, token, out, err] = setupComponent()
+  api = octo.api()
+  api.token process.env.GITHUB_API_TOKEN
+
+  setUp = (callback) ->
+    request = api.post "/orgs/the-domains/repos",
+      name: "example.com"
+      private: false
+      has_issues: false
+      has_wiki: false
+      has_downloads: false
+      auto_init: true
+    request.on 'success', (res) ->
+      callback()
+    request.on 'error', (err) ->
+      callback()
+    do request
+
+  tearDown = (test) ->
+    request = api.del "/repos/the-domains/example.com"
+    request.on 'success', ->
+      test.done()
+    request.on 'error', (err) ->
+      test.done()
+    do request
+
+  out.once 'data', (data) ->
+    console.log 'success'
+    test.equal data, 'grid-pages'
+    test.ok data
+    tearDown test
+
+  err.once 'data', (data) ->
+    console.log 'error', data
+    test.ok false, 'Got an error'
+    tearDown test
+
+  setUp (err) ->
+    token.send process.env.GITHUB_API_TOKEN
+    repo.send 'the-domains/example.com'
+    branch.send 'grid-pages'
