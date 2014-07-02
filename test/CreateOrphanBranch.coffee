@@ -77,13 +77,11 @@ exports['test creating a branch to a newly-initialized repo'] = (test) ->
     do request
 
   out.once 'data', (data) ->
-    console.log 'success'
     test.equal data, 'grid-pages'
     test.ok data
     tearDown test
 
   err.once 'data', (data) ->
-    console.log 'error', data
     test.ok false, 'Got an error'
     tearDown test
 
