@@ -17,7 +17,8 @@
     "components/GetUser.coffee",
     "components/GetStargazers.coffee",
     "components/SetContents.coffee",
-    "components/CreateOrphanBranch.coffee"
+    "components/CreateOrphanBranch.coffee",
+    "components/CreateBlob.coffee"
   ],
   "json": [
     "component.json"
@@ -25,6 +26,7 @@
   "noflo": {
     "icon": "github",
     "components": {
+      "CreateBlob": "components/CreateBlob.coffee",
       "CreateOrgRepository": "components/CreateOrgRepository.coffee",
       "CreateOrphanBranch": "components/CreateOrphanBranch.coffee",
       "CreateRepository": "components/CreateRepository.coffee",

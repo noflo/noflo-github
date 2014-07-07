@@ -33,6 +33,7 @@
   "noflo": {
     "icon": "github",
     "components": {
+      "CreateBlob": "components/CreateBlob.coffee",
       "CreateOrgRepository": "components/CreateOrgRepository.coffee",
       "CreateOrphanBranch": "components/CreateOrphanBranch.coffee",
       "CreateRepository": "components/CreateRepository.coffee",
