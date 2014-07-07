@@ -36,26 +36,38 @@ exports.getComponent = ->
       callback()
     branchReq.on 'error', ->
       # Missing branch, we need to create an empty commit, and then a reference to it
+      treeReq = api.post "/repos/#{data.repository}/git/trees",
+        tree: [
+          path: 'README.md'
+          content: data.branch
+          mode: '100644'
+          type: 'blob'
+        ]
+      treeReq.on 'success', (treeRes) ->
+        return callback new Error 'No SHA' unless treeRes.body.sha
 
-      commitReq = api.post "/repos/#{data.repository}/git/commits",
-        message: 'Initial'
-        tree: '4b825dc642cb6eb9a060e54bf8d69288fbee4904'
-        parents: []
-      commitReq.on 'success', (commitRes) ->
+        commitReq = api.post "/repos/#{data.repository}/git/commits",
+          message: 'Initial'
+          tree: treeRes.body.sha
+          parents: []
+        commitReq.on 'success', (commitRes) ->
 
-        refReq = api.post "/repos/#{data.repository}/git/refs",
-          ref: "refs/heads/#{data.branch}"
-          sha: commitRes.body.sha
-        refReq.on 'success', (refRes) ->
-          out.send data.branch
-          callback()
-        refReq.on 'error', (error) ->
+          refReq = api.post "/repos/#{data.repository}/git/refs",
+            ref: "refs/heads/#{data.branch}"
+            sha: commitRes.body.sha
+          refReq.on 'success', (refRes) ->
+            out.send data.branch
+            callback()
+          refReq.on 'error', (error) ->
+            callback error.body
+          do refReq
+
+        commitReq.on 'error', (error) ->
           callback error.body
-        do refReq
-
-      commitReq.on 'error', (error) ->
+        do commitReq
+      treeReq.on 'error', (error) ->
         callback error.body
-      do commitReq
+      do treeReq
     do branchReq
 
   c
