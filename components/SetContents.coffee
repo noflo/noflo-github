@@ -10,6 +10,7 @@ exports.getComponent = ->
   c = new noflo.Component
   c.branch = 'master'
   c.description = 'Create or update a file in the repository'
+  c.sendRepo = true
   c.inPorts.add 'in',
     datatype: 'string'
     description: 'File contents to push'
@@ -30,6 +31,13 @@ exports.getComponent = ->
   c.inPorts.add 'token',
     datatype: 'string'
     description: 'GitHub API token'
+  c.inPorts.add 'sendrepo',
+    datatype: 'boolean'
+    description: 'Whether to send repository path as group'
+    default: true
+    process: (event, payload) ->
+      return unless event is 'data'
+      c.sendRepo = String(payload) is 'true'
   c.outPorts.add 'out',
     datatype: 'string'
   c.outPorts.add 'error',
@@ -58,9 +66,11 @@ exports.getComponent = ->
         branch: c.branch
       updateReq.on 'success', (updateRes) ->
         # File was updated
+        out.beginGroup data.repository if c.sendRepo
         out.beginGroup data.path
         out.send updateRes.body.commit.sha
         out.endGroup()
+        out.endGroup() if c.sendRepo
         do callback
       updateReq.on 'error', (error) ->
         callback error.body
@@ -75,9 +85,11 @@ exports.getComponent = ->
         branch: c.branch
       createReq.on 'success', (createRes) ->
         # File was created
+        out.beginGroup data.repository if c.sendRepo
         out.beginGroup data.path
         out.send createRes.body.commit.sha
         out.endGroup()
+        out.endGroup() if c.sendRepo
         do callback
       createReq.on 'error', (error) ->
         callback error.body
