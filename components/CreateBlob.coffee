@@ -39,4 +39,6 @@ exports.getComponent = ->
       callback err.body
     do req
 
+  noflo.helpers.MultiError c
+
   c

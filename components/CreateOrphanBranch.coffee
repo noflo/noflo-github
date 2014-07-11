@@ -70,4 +70,6 @@ exports.getComponent = ->
       do treeReq
     do branchReq
 
+  noflo.helpers.MultiError c
+
   c

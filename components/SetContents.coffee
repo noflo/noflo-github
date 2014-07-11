@@ -84,4 +84,6 @@ exports.getComponent = ->
       do createReq
     do shaReq
 
+  noflo.helpers.MultiError c
+
   c

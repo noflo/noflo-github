@@ -75,4 +75,6 @@ exports.getComponent = ->
       callback err.body
     do request
 
+  noflo.helpers.MultiError c
+
   c
