@@ -14,17 +14,21 @@ exports.getComponent = ->
   c.inPorts.add 'repository',
     datatype: 'string'
     description: 'Repository path'
+    required: true
   c.inPorts.add 'path',
     datatype: 'string'
     description: 'File path inside repository'
+    required: true
   c.inPorts.add 'ref',
     datatype: 'string'
     description: 'The name of the commit/branch/tag'
     process: (event, payload) ->
       c.ref = payload if event is 'data'
+    required: true
   c.inPorts.add 'token',
     datatype: 'string'
     description: 'GitHub API token'
+    required: true
   c.inPorts.add 'sendrepo',
     datatype: 'boolean'
     description: 'Whether to send repository path as group'

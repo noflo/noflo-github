@@ -14,23 +14,29 @@ exports.getComponent = ->
   c.inPorts.add 'in',
     datatype: 'string'
     description: 'File contents to push'
+    required: true
   c.inPorts.add 'message',
     datatype: 'string'
     description: 'Commit message'
+    required: true
   c.inPorts.add 'repository',
     datatype: 'string'
     description: 'Repository path'
+    required: true
   c.inPorts.add 'path',
     datatype: 'string'
     description: 'File path inside repository'
+    required: true
   c.inPorts.add 'branch',
     datatype: 'string'
     description: 'Git branch to use'
     process: (event, payload) ->
       c.branch = payload if event is 'data'
+    required: true
   c.inPorts.add 'token',
     datatype: 'string'
     description: 'GitHub API token'
+    required: true
   c.inPorts.add 'sendrepo',
     datatype: 'boolean'
     description: 'Whether to send repository path as group'

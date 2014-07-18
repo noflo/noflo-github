@@ -7,9 +7,11 @@ exports.getComponent = ->
   c.inPorts.add 'branch',
     datatype: 'string'
     description: 'Branch name'
+    required: true
   c.inPorts.add 'repository',
     datatype: 'string'
     description: 'Repository path'
+    required: true
   c.inPorts.add 'token',
     datatype: 'string'
     description: 'GitHub API token'
