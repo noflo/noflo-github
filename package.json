@@ -17,7 +17,7 @@
     "node": ">=0.6.0"
   },
   "dependencies": {
-    "noflo": "^0.5.6",
+    "noflo": "^0.5.9",
     "octo": "git://github.com/bergie/octo.git#patched",
     "atob": "~1.1.0",
     "btoa": "~1.1.1"
@@ -39,6 +39,7 @@
       "CreateRepository": "components/CreateRepository.coffee",
       "GetContents": "components/GetContents.coffee",
       "GetCurrentUser": "components/GetCurrentUser.coffee",
+      "GetGist": "components/GetGist.coffee",
       "GetRepository": "components/GetRepository.coffee",
       "GetStargazers": "components/GetStargazers.coffee",
       "GetUser": "components/GetUser.coffee",
