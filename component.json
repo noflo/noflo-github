@@ -19,7 +19,8 @@
     "components/SetContents.coffee",
     "components/CreateOrphanBranch.coffee",
     "components/CreateBlob.coffee",
-    "components/GetGist.coffee"
+    "components/GetGist.coffee",
+    "components/GetReference.coffee"
   ],
   "json": [
     "component.json"
@@ -34,6 +35,7 @@
       "GetContents": "components/GetContents.coffee",
       "GetCurrentUser": "components/GetCurrentUser.coffee",
       "GetGist": "components/GetGist.coffee",
+      "GetReference": "components/GetReference.coffee",
       "GetRepository": "components/GetRepository.coffee",
       "GetStargazers": "components/GetStargazers.coffee",
       "GetUser": "components/GetUser.coffee",
