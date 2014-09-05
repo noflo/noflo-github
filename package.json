@@ -37,6 +37,7 @@
       "CreateOrgRepository": "components/CreateOrgRepository.coffee",
       "CreateOrphanBranch": "components/CreateOrphanBranch.coffee",
       "CreateRepository": "components/CreateRepository.coffee",
+      "GetBlob": "components/GetBlob.coffee",
       "GetContents": "components/GetContents.coffee",
       "GetCurrentUser": "components/GetCurrentUser.coffee",
       "GetGist": "components/GetGist.coffee",
