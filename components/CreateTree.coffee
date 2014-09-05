@@ -36,7 +36,7 @@ exports.getComponent = ->
       tree: data.tree
       base_tree: c.params.base
     req.on 'success', (res) ->
-      out.send res.body.sha
+      out.send res.body
       do callback
     req.on 'error', (err) ->
       callback err.body
