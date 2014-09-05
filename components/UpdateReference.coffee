@@ -35,6 +35,7 @@ exports.getComponent = ->
     api.token c.params.token if c.params.token
     ref = c.params?.reference or 'heads/master'
     force = String(c.params?.force) is 'true'
+    ref = ref.substr 5 if ref.substr(0, 5) is 'refs/'
 
     req = api.patch "/repos/#{data.repository}/git/refs/#{ref}",
       sha: data.commit
