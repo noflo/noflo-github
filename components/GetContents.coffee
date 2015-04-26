@@ -71,7 +71,7 @@ exports.getComponent = ->
         return
       out.beginGroup data.repository if c.sendRepo
       out.beginGroup data.path
-      out.send atob res.body.content.replace /\s/g, ''
+      out.send decodeURIComponent escape atob res.body.content.replace /\s/g, ''
       out.endGroup()
       out.endGroup() if c.sendRepo
       do callback

@@ -67,7 +67,7 @@ exports.getComponent = ->
       updateReq = api.put "/repos/#{data.repository}/contents/#{data.path}",
         path: data.path
         message: data.message
-        content: btoa data.in
+        content: btoa unescape encodeURIComponent data.in
         sha: shaRes.body.sha
         branch: c.branch
       updateReq.on 'success', (updateRes) ->
@@ -87,7 +87,7 @@ exports.getComponent = ->
       createReq = api.put "/repos/#{data.repository}/contents/#{data.path}",
         path: data.path
         message: data.message
-        content: btoa data.in
+        content: btoa unescape encodeURIComponent data.in
         branch: c.branch
       createReq.on 'success', (createRes) ->
         # File was created
