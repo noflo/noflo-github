@@ -28,7 +28,7 @@
     "grunt-contrib-nodeunit": "0.4.1",
     "grunt-contrib-uglify": "0.6.0",
     "grunt-noflo-manifest": "0.1.11",
-    "grunt-noflo-browser": "0.1.11"
+    "grunt-noflo-browser": "0.1.17"
   },
   "noflo": {
     "icon": "github",
