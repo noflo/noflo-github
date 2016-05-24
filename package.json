@@ -19,7 +19,7 @@
   "dependencies": {
     "noflo": "0.5.22",
     "octo": "git://github.com/bergie/octo.git#patched",
-    "atob": "2.0.0",
+    "atob": "2.0.2",
     "btoa": "1.1.2"
   },
   "devDependencies": {
