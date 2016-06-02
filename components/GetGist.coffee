@@ -20,7 +20,7 @@ exports.getComponent = ->
   noflo.helpers.WirePattern c,
     in: 'gist'
     out: 'out'
-    params: 'token'
+    params: ['token']
     async: true
     forwardGroups: true
   , (id, groups, out, callback) ->

@@ -23,7 +23,7 @@ exports.getComponent = ->
 
   noflo.helpers.WirePattern c,
     in: ['repository', 'sha']
-    params: 'token'
+    params: ['token']
     out: 'out'
     async: true
     forwardGroups: true
