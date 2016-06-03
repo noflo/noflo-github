@@ -2,7 +2,7 @@
   "name": "noflo-github",
   "description": "GitHub service components for the NoFlo flow-based programming environment",
   "author": "Henri Bergius <henri.bergius@iki.fi>",
-  "version": "0.0.17",
+  "version": "0.0.18",
   "license": "MIT",
   "keywords": ["noflo"],
   "repository": {
@@ -13,7 +13,7 @@
     "node": ">=0.6.0"
   },
   "dependencies": {
-    "noflo": "^0.5.22",
+    "noflo": "0.x >= 0.5",
     "octo": "git://github.com/bergie/octo.git#patched",
     "atob": "~2.0.3",
     "btoa": "~1.1.2"
