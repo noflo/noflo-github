@@ -21,6 +21,8 @@ exports.getComponent = ->
   c.outPorts.add 'error',
     datatype: 'object'
 
+  c.getOcto = -> octo
+
   noflo.helpers.WirePattern c,
     in: ['branch', 'repository']
     params: ['token']
