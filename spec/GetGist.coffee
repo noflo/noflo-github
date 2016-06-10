@@ -14,7 +14,6 @@ describe 'GetGist component', ->
   out = null
   err = null
   before (done) ->
-    return @skip() unless process?.env?.GITHUB_API_TOKEN
     @timeout 4000
     loader = new noflo.ComponentLoader baseDir
     loader.load 'github/GetGist', (err, instance) ->
@@ -45,6 +44,7 @@ describe 'GetGist component', ->
         done()
       id.send '1d42f66f5cc4614df935'
   describe 'reading a valid gist with token', ->
+    return @skip() unless process?.env?.GITHUB_API_TOKEN
     it 'should succeed', (done) ->
       err.on 'data', done
       out.on 'data', (data) ->
