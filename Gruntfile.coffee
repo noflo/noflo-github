@@ -53,11 +53,12 @@ module.exports = ->
           port: 8000
     # BDD tests on browser
     mocha_phantomjs:
-      options:
-        output: 'spec/result.xml'
-        reporter: 'spec'
-        failWithOutput: true
-        urls: ['http://localhost:8000/spec/runner.html']
+      all:
+        options:
+          output: 'spec/result.xml'
+          reporter: 'spec'
+          failWithOutput: true
+          urls: ['http://localhost:8000/spec/runner.html']
 
   # Grunt plugins used for building
   @loadNpmTasks 'grunt-noflo-manifest'
