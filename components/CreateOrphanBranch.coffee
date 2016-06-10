@@ -61,17 +61,13 @@ exports.getComponent = ->
             out.send data.branch
             callback()
           refReq.on 'error', (error) ->
-            callback error.body
+            callback new Error error.body?.error
           do refReq
 
         commitReq.on 'error', (error) ->
-          callback error.body
+          callback new Error error.body?.error
         do commitReq
       treeReq.on 'error', (error) ->
-        callback error.body
+        callback new Error error.body?.error
       do treeReq
     do branchReq
-
-  noflo.helpers.MultiError c
-
-  c
