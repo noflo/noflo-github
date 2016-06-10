@@ -44,8 +44,8 @@ describe 'GetGist component', ->
         done()
       id.send '1d42f66f5cc4614df935'
   describe 'reading a valid gist with token', ->
-    return @skip() unless process?.env?.GITHUB_API_TOKEN
     it 'should succeed', (done) ->
+      return @skip() unless process?.env?.GITHUB_API_TOKEN
       err.on 'data', done
       out.on 'data', (data) ->
         chai.expect(data).to.be.an 'object'
