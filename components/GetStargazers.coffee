@@ -39,5 +39,5 @@ exports.getComponent = ->
       out.endGroup() if grouped
       callback()
     request.on 'error', (err) =>
-      callback err.body
+      callback err.error or err.body
     do request

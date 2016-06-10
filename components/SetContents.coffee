@@ -79,7 +79,7 @@ exports.getComponent = ->
         out.endGroup() if c.sendRepo
         do callback
       updateReq.on 'error', (error) ->
-        callback error.body
+        callback error.error or error.body
       do updateReq
 
     shaReq.on 'error', ->
@@ -98,10 +98,6 @@ exports.getComponent = ->
         out.endGroup() if c.sendRepo
         do callback
       createReq.on 'error', (error) ->
-        callback error.body
+        callback error.error or error.body
       do createReq
     do shaReq
-
-  noflo.helpers.MultiError c
-
-  c

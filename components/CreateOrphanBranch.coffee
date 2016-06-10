@@ -53,7 +53,6 @@ exports.getComponent = ->
           tree: treeRes.body.sha
           parents: []
         commitReq.on 'success', (commitRes) ->
-
           refReq = api.post "/repos/#{data.repository}/git/refs",
             ref: "refs/heads/#{data.branch}"
             sha: commitRes.body.sha
@@ -61,13 +60,13 @@ exports.getComponent = ->
             out.send data.branch
             callback()
           refReq.on 'error', (error) ->
-            callback new Error error.body?.error
+            callback error.error or error.body
           do refReq
 
         commitReq.on 'error', (error) ->
-          callback new Error error.body?.error
+          callback error.error or error.body
         do commitReq
       treeReq.on 'error', (error) ->
-        callback new Error error.body?.error
+        callback error.error or error.body
       do treeReq
     do branchReq

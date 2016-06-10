@@ -43,7 +43,5 @@ exports.getComponent = ->
       out.send res.body.sha
       do callback
     req.on 'error', (err) ->
-      callback err.body
+      callback err.error or err.body
     do req
-
-  c
