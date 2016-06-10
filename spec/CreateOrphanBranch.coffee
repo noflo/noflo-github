@@ -69,6 +69,7 @@ describe 'CreateOrphanBranch component', ->
   describe 'creating a branch to a newly-initialized repo', ->
     api = null
     before (done) ->
+      return @skip() unless process?.env?.GITHUB_API_TOKEN
       api = octo.api()
       api.token process.env.GITHUB_API_TOKEN
       request = api.post "/orgs/the-domains/repos",
