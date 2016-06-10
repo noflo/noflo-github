@@ -1,5 +1,4 @@
 noflo = require 'noflo'
-octo = require 'octo'
 
 unless noflo.isBrowser()
   chai = require 'chai'
