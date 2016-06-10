@@ -35,7 +35,5 @@ exports.getComponent = ->
       out.endGroup()
       callback()
     request.on 'error', (err) ->
-      callback err.body
+      callback new Error err.body?.error
     do request
-
-  c
