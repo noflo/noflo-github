@@ -42,7 +42,7 @@ describe 'GetGist component', ->
       err.on 'data', done
       out.on 'data', (data) ->
         chai.expect(data).to.be.an 'object'
-        chai.expect(data.files['noflo.json']).to.be.a 'string'
+        chai.expect(data.files['noflo.json']).to.be.a 'object'
         done()
       id.send '1d42f66f5cc4614df935'
   describe 'reading a valid gist with token', ->
@@ -50,7 +50,7 @@ describe 'GetGist component', ->
       err.on 'data', done
       out.on 'data', (data) ->
         chai.expect(data).to.be.an 'object'
-        chai.expect(data.files['noflo.json']).to.be.a 'string'
+        chai.expect(data.files['noflo.json']).to.be.a 'object'
         done()
       token.send process.env.GITHUB_API_TOKEN
       id.send '1d42f66f5cc4614df935'
