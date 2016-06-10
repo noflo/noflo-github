@@ -1,30 +1,27 @@
 noflo = require 'noflo'
 octo = require 'octo'
 
-class GetCurrentUser extends noflo.AsyncComponent
-  constructor: ->
-    @token = null
+exports.getComponent = ->
+  c = new noflo.Component
+  c.inPorts.add 'token',
+    datatype: 'string'
+  c.outPorts.add 'out',
+    datatype: 'object'
+  c.outPorts.add 'error',
+    datatype: 'object'
 
-    @inPorts =
-      token: new noflo.Port
-    @outPorts =
-      out: new noflo.Port
-      error: new noflo.Port
-
-    super 'token'
-
-  doAsync: (token, callback) ->
+  noflo.helpers.WirePattern c,
+    in: 'token'
+    out: 'out'
+    forwardGroups: true
+    async: true
+  , (data, groups, out, callback) ->
     api = octo.api()
-    api.token token
+    api.token data
     request = api.get "/user"
     request.on 'success', (res) =>
-      @outPorts.out.send res.body
-      @outPorts.out.disconnect()
-      callback()
+      out.send res.body
+      do callback
     request.on 'error', (err) =>
-      @outPorts.out.disconnect()
       callback err.body
-    @outPorts.out.connect()
     do request
-
-exports.getComponent = -> new GetCurrentUser
