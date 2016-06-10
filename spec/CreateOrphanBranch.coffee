@@ -1,5 +1,4 @@
 noflo = require 'noflo'
-octo = require 'octo'
 
 unless noflo.isBrowser()
   chai = require 'chai'
@@ -70,7 +69,7 @@ describe 'CreateOrphanBranch component', ->
     api = null
     before (done) ->
       return @skip() unless process?.env?.GITHUB_API_TOKEN
-      api = octo.api()
+      api = c.getOcto().api()
       api.token process.env.GITHUB_API_TOKEN
       request = api.post "/orgs/the-domains/repos",
         name: "example.com"
