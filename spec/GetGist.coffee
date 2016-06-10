@@ -13,7 +13,6 @@ describe 'GetGist component', ->
   id = null
   token = null
   out = null
-  files = null
   err = null
   before (done) ->
     return @skip() unless process?.env?.GITHUB_API_TOKEN
