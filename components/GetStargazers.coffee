@@ -1,40 +1,43 @@
 noflo = require 'noflo'
 octo = require 'octo'
 
-class GetStargazers extends noflo.AsyncComponent
-  constructor: ->
-    @token = null
+exports.getComponent = ->
+  c = new noflo.Component
+  c.inPorts.add 'repository',
+    datatype: 'string'
+    required: true
+  c.inPorts.add 'token',
+    datatype: 'string'
+    required: true
+  c.outPorts.add 'out',
+    datatype: 'object'
+  c.outPorts.add 'error',
+    datatype: 'object'
 
-    @inPorts =
-      repository: new noflo.Port
-      token: new noflo.Port
-    @outPorts =
-      out: new noflo.Port
-      error: new noflo.Port
-
-    @inPorts.token.on 'data', (data) =>
-      @token = data
-
-    super 'repository'
-
-  doAsync: (repository, callback) ->
+  noflo.helpers.WirePattern c,
+    in: 'repository'
+    params: ['token']
+    out: 'out'
+    forwardGroups: true
+    async: true
+  , (data, groups, out, callback) ->
     api = octo.api()
-    api.token @token if @token
-    request = api.get "/repos/#{repository}/stargazers"
+    api.token c.params.token
+    grouped = false
+    request = api.get "/repos/#{data}/stargazers"
     request.perpage 30
-    request.on 'success', (res) =>
+    request.on 'success', (res) ->
+      unless grouped
+        out.beginGroup data
+        grouped = true
+
       unless res.body.length
-        @outPorts.out.disconnect()
-        return
-      @outPorts.out.beginGroup repository
-      @outPorts.out.send user for user in res.body
-      @outPorts.out.endGroup()
+        out.endGroup() if grouped
+        return callback()
+      out.send user for user in res.body
       return request.next() if request.hasnext()
-      @outPorts.out.disconnect()
+      out.endGroup() if grouped
       callback()
     request.on 'error', (err) =>
-      callback err.body
-    @outPorts.out.connect()
+      callback err.error or err.body
     do request
-
-exports.getComponent = -> new GetStargazers

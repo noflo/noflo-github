@@ -34,8 +34,6 @@ exports.getComponent = ->
       out.send res.body
       out.endGroup()
       callback()
-    request.on 'error', (err) ->
-      callback err.body
+    request.on 'error', (res) ->
+      callback res.error or res.body
     do request
-
-  c

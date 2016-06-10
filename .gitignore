@@ -2,3 +2,5 @@
 /browser/
 /components/*/
 npm-debug.log
+spec/*.xml
+spec/*.js

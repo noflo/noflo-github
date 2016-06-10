@@ -1,37 +1,33 @@
 noflo = require 'noflo'
 octo = require 'octo'
 
-class GetUser extends noflo.AsyncComponent
-  constructor: ->
-    @token = null
+exports.getComponent = ->
+  c = new noflo.Component
+  c.inPorts.add 'user',
+    datatype: 'string'
+    required: true
+  c.inPorts.add 'token',
+    datatype: 'string'
+    required: true
+  c.outPorts.add 'out',
+    datatype: 'object'
+  c.outPorts.add 'error',
+    datatype: 'object'
 
-    @inPorts =
-      user: new noflo.Port
-      token: new noflo.Port
-    @outPorts =
-      out: new noflo.Port
-      error: new noflo.Port
-
-    @inPorts.token.on 'data', (data) =>
-      @token = data
-
-    super 'user'
-
-  doAsync: (user, callback) ->
+  noflo.helpers.WirePattern c,
+    in: 'user'
+    out: 'out'
+    params: ['token']
+    forwardGroups: true
+    async: true
+  , (data, groups, out, callback) ->
     api = octo.api()
-    api.token @token if @token
+    api.token c.params.token
 
-    request = api.get "/users/#{user}"
-    request.on 'success', (res) =>
-      @outPorts.out.beginGroup user
-      @outPorts.out.send res.body
-      @outPorts.out.endGroup()
-      @outPorts.out.disconnect()
-      callback()
-    request.on 'error', (err) =>
-      @outPorts.out.disconnect()
-      callback err.body
-    @outPorts.out.connect()
+    request = api.get "/users/#{data}"
+    request.on 'success', (res) ->
+      out.send res.body
+      do callback
+    request.on 'error', (err) ->
+      callback err.error or err.body
     do request
-
-exports.getComponent = -> new GetUser

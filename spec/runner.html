@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>github in browser</title>
+    <link rel="stylesheet" href="../node_modules/mocha/mocha.css">
+    <style type="text/css">
+      #fixtures {
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="mocha"></div>
+    <div id="fixtures"></div>
+    <script src="../browser/noflo-github.js"></script>
+    <script src="../node_modules/chai/chai.js"></script>
+    <script src="../node_modules/mocha/mocha.js"></script>
+    <script>
+      if (window.initMochaPhantomJS) {
+        window.initMochaPhantomJS();
+      }
+      mocha.setup('bdd');
+    </script>
+    <script src="./CreateOrgRepository.js"></script>
+    <script src="./CreateOrphanBranch.js"></script>
+    <script src="./CreateRepository.js"></script>
+    <script src="./GetContents.js"></script>
+    <script src="./GetGist.js"></script>
+    <script src="./GetRepository.js"></script>
+    <script src="./GetStargazers.js"></script>
+    <script src="./GetCurrentUser.js"></script>
+    <script src="./GetUser.js"></script>
+    <script>
+      mocha.run();
+    </script>
+  </body>
+</html>
+
