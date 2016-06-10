@@ -80,6 +80,9 @@ describe 'GetContents component', ->
 
   describe 'reading a missing file', (done) ->
     it 'should produce an error', (done) ->
+      @timeout 4000
+      out.on 'data', (data) ->
+        return done new Error 'Unexpected data received'
       err.on 'data', (data) ->
         chai.expect(data).to.be.an 'error'
         chai.expect(data.message).to.equal 'Not found'
