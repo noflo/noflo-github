@@ -42,7 +42,7 @@ describe 'CreateOrphanBranch component', ->
 
   describe 'creating a missing branch', ->
     it 'should succeed', (done) ->
-      @timeout 4000
+      @timeout 10000
       testBranch = "branch_#{Date.now()}"
 
       err.on 'data', done
@@ -56,7 +56,7 @@ describe 'CreateOrphanBranch component', ->
 
   describe 'creating an existing branch', ->
     it 'should succeed', (done) ->
-      @timeout 4000
+      @timeout 10000
       err.on 'data', done
       out.on 'data', (data) ->
         chai.expect(data).to.equal 'master'
@@ -90,7 +90,7 @@ describe 'CreateOrphanBranch component', ->
       do request
       api = null
     it 'should succeed', (done) ->
-      @timeout 4000
+      @timeout 10000
       err.on 'data', done
       out.on 'data', (data) ->
         chai.expect(data).to.equal 'grid-pages'
