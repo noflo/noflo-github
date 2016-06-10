@@ -39,17 +39,25 @@ describe 'GetStargazers component', ->
 
   describe 'reading from a valid repo', ->
     it 'should produce a list of stargazers', (done) ->
-      @timeout 4000
+      @timeout 20000
       received = 0
       err.on 'data', done
 
+      groups = []
+      out.on 'begingroup', (group) ->
+        groups.push group
       out.on 'data', (data) ->
-        received++
         chai.expect(data).to.be.an 'object'
         chai.expect(data.login).to.be.a 'string'
+        chai.expect(groups).to.eql ['noflo/noflo-ui']
+        received++
+      out.on 'endgroup', ->
+        groups.pop()
       out.on 'disconnect', ->
         chai.expect(received).to.be.above 100
+        chai.expect(groups).to.eql []
         done()
 
       token.send process.env.GITHUB_API_TOKEN
       repo.send 'noflo/noflo-ui'
+      repo.disconnect()
