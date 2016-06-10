@@ -48,10 +48,12 @@ describe 'GetRepository component', ->
       ins.send 'bergie/create'
 
   describe 'reading a missing repository', ->
+    @timeout 6000
     it 'should fail', (done) ->
       out.on 'data', (data) ->
         return done new Error 'Should not have returned data'
       err.on 'data', (data) ->
+        console.log data
         chai.expect(data).to.be.an 'error'
         chai.expect(data.message).to.equal 'Not found'
         done()
