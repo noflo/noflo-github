@@ -46,13 +46,18 @@ module.exports = ->
           require: 'coffee-script/register'
           grep: process.env.TESTS
 
+    # Web server for the browser tests
+    connect:
+      server:
+        options:
+          port: 8000
     # BDD tests on browser
     mocha_phantomjs:
       options:
         output: 'spec/result.xml'
         reporter: 'spec'
         failWithOutput: true
-      all: ['spec/runner.html']
+        urls: ['http://localhost:8000/spec/runner.html']
 
   # Grunt plugins used for building
   @loadNpmTasks 'grunt-noflo-manifest'
@@ -62,6 +67,7 @@ module.exports = ->
   # Grunt plugins used for testing
   @loadNpmTasks 'grunt-coffeelint'
   @loadNpmTasks 'grunt-mocha-test'
+  @loadNpmTasks 'grunt-contrib-connect'
   @loadNpmTasks 'grunt-mocha-phantomjs'
 
   # Our local tasks
@@ -78,6 +84,7 @@ module.exports = ->
     if target is 'all' or target is 'browser'
       @task.run 'coffee'
       @task.run 'noflo_browser'
+      @task.run 'connect'
       @task.run 'mocha_phantomjs'
 
   @registerTask 'default', ['test']
