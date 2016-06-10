@@ -84,7 +84,7 @@ describe 'GetContents component', ->
         return done new Error 'Unexpected data received'
       err.on 'data', (data) ->
         chai.expect(data).to.be.an 'error'
-        chai.expect(data.message).to.equal 'Not found'
+        chai.expect(data.status).to.equal 404
         done()
 
       token.send process.env.GITHUB_API_TOKEN
