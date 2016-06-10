@@ -79,7 +79,9 @@ describe 'CreateOrphanBranch component', ->
         has_downloads: false
         auto_init: true
       request.on 'success', (res) ->
-        done()
+        setTimeout ->
+          done()
+        , 1000
       request.on 'error', done
       do request
     after (done) ->
