@@ -16,13 +16,16 @@ module.exports = ->
         files:
           'browser/noflo-github.js': ['component.json']
 
-    # JavaScript minification for the browser
-    uglify:
-      options:
-        report: 'min'
-      noflo:
-        files:
-          './browser/noflo-github.min.js': ['./browser/noflo-github.js']
+    # CoffeeScript compilation
+    coffee:
+      spec:
+        options:
+          bare: true
+        expand: true
+        cwd: 'spec'
+        src: ['**.coffee']
+        dest: 'spec'
+        ext: '.js'
 
     # Coding standards
     coffeelint:
@@ -43,21 +46,29 @@ module.exports = ->
           require: 'coffee-script/register'
           grep: process.env.TESTS
 
+    # BDD tests on browser
+    mocha_phantomjs:
+      options:
+        output: 'spec/result.xml'
+        reporter: 'spec'
+        failWithOutput: true
+      all: ['spec/runner.html']
+
   # Grunt plugins used for building
   @loadNpmTasks 'grunt-noflo-manifest'
   @loadNpmTasks 'grunt-noflo-browser'
-  @loadNpmTasks 'grunt-contrib-uglify'
+  @loadNpmTasks 'grunt-contrib-coffee'
 
   # Grunt plugins used for testing
   @loadNpmTasks 'grunt-coffeelint'
   @loadNpmTasks 'grunt-mocha-test'
+  @loadNpmTasks 'grunt-mocha-phantomjs'
 
   # Our local tasks
   @registerTask 'build', 'Build NoFlo for the chosen target platform', (target = 'all') =>
     if target is 'all' or target is 'browser'
       @task.run 'noflo_manifest'
       @task.run 'noflo_browser'
-      @task.run 'uglify'
 
   @registerTask 'test', 'Build NoFlo and run automated tests', (target = 'all') =>
     @task.run 'coffeelint'
@@ -65,6 +76,8 @@ module.exports = ->
     if target is 'all' or target is 'nodejs'
       @task.run 'mochaTest'
     if target is 'all' or target is 'browser'
+      @task.run 'coffee'
       @task.run 'noflo_browser'
+      @task.run 'mocha_phantomjs'
 
   @registerTask 'default', ['test']
