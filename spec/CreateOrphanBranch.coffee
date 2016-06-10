@@ -84,6 +84,7 @@ describe 'CreateOrphanBranch component', ->
       request.on 'error', done
       do request
     after (done) ->
+      return @skip() unless process?.env?.GITHUB_API_TOKEN
       request = api.del "/repos/the-domains/example.com"
       request.on 'success', ->
         done()
