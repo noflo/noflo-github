@@ -45,6 +45,8 @@ describe 'GetContents component', ->
     err = null
 
   describe 'reading a valid JSON file', ->
+    before ->
+      return @skip() unless process?.env?.GITHUB_API_TOKEN
     it 'should produce parseable contents', (done) ->
       err.on 'data', done
 
@@ -62,6 +64,8 @@ describe 'GetContents component', ->
       path.send 'package.json'
 
   describe 'reading a valid directory', ->
+    before ->
+      return @skip() unless process?.env?.GITHUB_API_TOKEN
     it 'should produce a listing of files', (done) ->
       err.on 'data', done
 
@@ -78,6 +82,8 @@ describe 'GetContents component', ->
       path.send 'locale'
 
   describe 'reading a missing file', (done) ->
+    before ->
+      return @skip() unless process?.env?.GITHUB_API_TOKEN
     it 'should produce an error', (done) ->
       @timeout 4000
       out.on 'data', (data) ->

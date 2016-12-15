@@ -37,6 +37,8 @@ describe 'GetUser component', ->
     err = null
 
   describe 'reading a valid user', ->
+    before ->
+      return @skip() unless process?.env?.GITHUB_API_TOKEN
     it 'should send user data', (done) ->
       err.on 'data', done
       out.on 'data', (data) ->

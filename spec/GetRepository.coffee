@@ -37,6 +37,8 @@ describe 'GetRepository component', ->
     err = null
 
   describe 'reading a valid repository', ->
+    before ->
+      return @skip() unless process?.env?.GITHUB_API_TOKEN
     it 'should succeed', (done) ->
       err.on 'data', done
       out.on 'data', (data) ->
@@ -48,6 +50,8 @@ describe 'GetRepository component', ->
       ins.send 'bergie/create'
 
   describe 'reading a missing repository', ->
+    before ->
+      return @skip() unless process?.env?.GITHUB_API_TOKEN
     @timeout 6000
     it 'should fail', (done) ->
       out.on 'data', (data) ->
