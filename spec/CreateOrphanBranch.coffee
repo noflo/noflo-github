@@ -71,16 +71,21 @@ describe 'CreateOrphanBranch component', ->
 
   describe 'creating a branch to a newly-initialized repo', ->
     api = null
+    repo = null
     before (done) ->
       return @skip() unless process?.env?.GITHUB_API_TOKEN
       @timeout 4000
+
+      prefix = Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 5)
+      repo = "#{prefix}.example.com"
+
       api = c.getApi()
       api.authenticate
         type: 'token'
         token: process.env.GITHUB_API_TOKEN
       api.repos.createForOrg
         org: 'the-domains'
-        name: 'example.com'
+        name: repo
         private: false
         has_issues: false
         has_wiki: false
@@ -97,7 +102,7 @@ describe 'CreateOrphanBranch component', ->
       @timeout 4000
       api.repos.delete
         owner: 'the-domains'
-        repo: 'example.com'
+        repo: repo
       , (err) ->
         return done err if err
         api = null
