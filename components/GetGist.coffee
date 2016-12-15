@@ -1,5 +1,5 @@
 noflo = require 'noflo'
-octo = require 'octo'
+github = require 'github'
 
 exports.getComponent = ->
   c = new noflo.Component
@@ -24,18 +24,19 @@ exports.getComponent = ->
     async: true
     forwardGroups: true
   , (id, groups, out, callback) ->
-    api = octo.api()
-    api.token c.params.token if c.params?.token
-
-    request = api.get "/gists/#{id}"
-    request.on 'success', (res) ->
-      unless res.body
+    api = new github
+    if c.params.token
+      api.authenticate
+        type: 'token'
+        token: c.params.token
+    api.gists.get
+      id: id
+    , (err, res) ->
+      return callback err if err
+      unless res
         callback new Error 'No result received'
         return
       out.beginGroup id
-      out.send res.body
+      out.send res
       out.endGroup id
       callback()
-    request.on 'error', (err) ->
-      callback err.error or err.body
-    do request

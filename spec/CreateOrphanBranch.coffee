@@ -74,33 +74,34 @@ describe 'CreateOrphanBranch component', ->
     before (done) ->
       return @skip() unless process?.env?.GITHUB_API_TOKEN
       @timeout 4000
-      api = c.getOcto().api()
-      api.token process.env.GITHUB_API_TOKEN
-      request = api.post "/orgs/the-domains/repos",
-        name: "example.com"
+      api = c.getApi()
+      api.authenticate
+        type: 'token'
+        token: process.env.GITHUB_API_TOKEN
+      api.repos.createForOrg
+        org: 'the-domains'
+        name: 'example.com'
         private: false
         has_issues: false
         has_wiki: false
         has_downloads: false
         auto_init: true
-      request.on 'success', (res) ->
+      , (err) ->
+        return done err if err
         setTimeout ->
           done()
         , 1000
-      request.on 'error', (err) ->
-        done new Error err.body.message
-      do request
       return
     after (done) ->
       return @skip() unless process?.env?.GITHUB_API_TOKEN
       @timeout 4000
-      request = api.del "/repos/the-domains/example.com"
-      request.on 'success', ->
+      api.repos.delete
+        owner: 'the-domains'
+        repo: 'example.com'
+      , (err) ->
+        return done err if err
+        api = null
         done()
-      request.on 'error', (err) ->
-        done new Error err.body.message
-      do request
-      api = null
       return
     it 'should succeed', (done) ->
       @timeout 10000

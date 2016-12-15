@@ -57,8 +57,9 @@ describe 'GetRepository component', ->
       out.on 'data', (data) ->
         return done new Error 'Should not have returned data'
       err.on 'data', (data) ->
-        chai.expect(data).to.be.an 'error'
-        chai.expect(data.status).to.equal 404
+        chai.expect(data).to.be.an 'object'
+        chai.expect(data.message).to.be.a 'string'
+        chai.expect(data.code).to.equal 404
         done()
 
       token.send process.env.GITHUB_API_TOKEN

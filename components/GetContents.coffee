@@ -1,10 +1,6 @@
 noflo = require 'noflo'
-octo = require 'octo'
-
-unless noflo.isBrowser()
-  atob = require 'atob'
-else
-  atob = window.atob
+github = require 'github'
+atob = require 'atob'
 
 exports.getComponent = ->
   c = new noflo.Component
@@ -52,18 +48,27 @@ exports.getComponent = ->
     async: true
     forwardGroups: true
   , (data, groups, out, callback) ->
-    api = octo.api()
-    api.token c.params.token if c.params.token
+    api = new github
+    if c.params.token
+      api.authenticate
+        type: 'token'
+        token: c.params.token
 
-    request = api.get "/repos/#{data.repository}/contents/#{data.path}?ref=#{c.ref}"
-    request.on 'success', (res) ->
-      unless res.body.content
-        unless toString.call(res.body) is '[object Array]'
+    [org, repoName] = data.repository.split '/'
+    api.repos.getContent
+      owner: org
+      repo: repoName
+      path: data.path
+      ref: c.ref
+    , (err, res) ->
+      return callback err if err
+      unless res.content
+        unless toString.call(res) is '[object Array]'
           callback new Error 'content not found'
           return
         # Directory, send file paths
         c.outPorts.files.beginGroup data.repository if c.sendRepo
-        for file in res.body
+        for file in res
           c.outPorts.files.send file
         c.outPorts.files.endGroup() if c.sendRepo
         c.outPorts.files.disconnect()
@@ -71,10 +76,7 @@ exports.getComponent = ->
         return
       out.beginGroup data.repository if c.sendRepo
       out.beginGroup data.path
-      out.send decodeURIComponent escape atob res.body.content.replace /\s/g, ''
+      out.send decodeURIComponent escape atob res.content.replace /\s/g, ''
       out.endGroup()
       out.endGroup() if c.sendRepo
       do callback
-    request.on 'error', (err) ->
-      callback err.error or err.body
-    do request

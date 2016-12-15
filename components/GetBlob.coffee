@@ -1,5 +1,5 @@
 noflo = require 'noflo'
-octo = require 'octo'
+github = require 'github'
 
 exports.getComponent = ->
   c = new noflo.Component
@@ -28,19 +28,24 @@ exports.getComponent = ->
     async: true
     forwardGroups: true
   , (data, groups, out, callback) ->
-    api = octo.api()
-    api.token c.params.token if c.params.token
+    api = new github
+    unless c.params.token
+      return callback new Error 'token required'
+    api.authenticate
+      type: 'token'
+      token: c.params.token
 
-    request = api.get "/repos/#{data.repository}/git/blobs/#{data.sha}"
-    request.on 'success', (res) ->
-      unless res.body
-        return callback new Error 'no result available'
+    [org, repoName] = data.repository.split '/'
+    api.gitdata.getBlob
+      owner: org
+      repo: repoName
+      sha: data.sha
+    , (err, res) ->
+      return callback err if err
+      return callback new Error 'no result available' unless res
       out.beginGroup data.repository
       out.beginGroup data.sha
       out.send res.body
       out.endGroup()
       out.endGroup()
       do callback
-    request.on 'error', (err) ->
-      callback err.error or err.body
-    do request
