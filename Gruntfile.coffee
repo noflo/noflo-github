@@ -29,6 +29,7 @@ module.exports = ->
           target: 'web'
         ignores: [
           /bin\/coffee/
+          /tv4/
         ]
       build:
         files:
