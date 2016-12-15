@@ -38,6 +38,8 @@ describe 'GetStargazers component', ->
     err = null
 
   describe 'reading from a valid repo', ->
+    before ->
+      return @skip() unless process?.env?.GITHUB_API_TOKEN
     it 'should produce a list of stargazers', (done) ->
       @timeout 20000
       received = 0

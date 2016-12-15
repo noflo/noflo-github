@@ -40,6 +40,8 @@ describe 'CreateOrphanBranch component', ->
     err = null
 
   describe 'creating a missing branch', ->
+    before ->
+      return @skip() unless process?.env?.GITHUB_API_TOKEN
     it 'should succeed', (done) ->
       @timeout 10000
       testBranch = "branch_#{Date.now()}"
@@ -54,6 +56,8 @@ describe 'CreateOrphanBranch component', ->
       branch.send testBranch
 
   describe 'creating an existing branch', ->
+    before ->
+      return @skip() unless process?.env?.GITHUB_API_TOKEN
     it 'should succeed', (done) ->
       @timeout 10000
       err.on 'data', done
@@ -69,6 +73,7 @@ describe 'CreateOrphanBranch component', ->
     api = null
     before (done) ->
       return @skip() unless process?.env?.GITHUB_API_TOKEN
+      @timeout 4000
       api = c.getOcto().api()
       api.token process.env.GITHUB_API_TOKEN
       request = api.post "/orgs/the-domains/repos",
@@ -82,16 +87,21 @@ describe 'CreateOrphanBranch component', ->
         setTimeout ->
           done()
         , 1000
-      request.on 'error', done
+      request.on 'error', (err) ->
+        done new Error err.body.message
       do request
+      return
     after (done) ->
       return @skip() unless process?.env?.GITHUB_API_TOKEN
+      @timeout 4000
       request = api.del "/repos/the-domains/example.com"
       request.on 'success', ->
         done()
-      request.on 'error', done
+      request.on 'error', (err) ->
+        done new Error err.body.message
       do request
       api = null
+      return
     it 'should succeed', (done) ->
       @timeout 10000
       err.on 'data', done
