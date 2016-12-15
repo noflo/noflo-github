@@ -12,6 +12,24 @@ module.exports = ->
 
     # Browser build of NoFlo
     noflo_browser:
+      options:
+        webpack:
+          module:
+            loaders: [
+              { test: /\.coffee$/, loader: "coffee-loader" }
+              { test: /\.json$/, loader: "json-loader" }
+              { test: /\.fbp$/, loader: "fbp-loader" }
+            ]
+          resolve:
+            extensions: ["", ".coffee", ".js"]
+          node:
+            net: 'empty'
+            tls: 'empty'
+            fs: 'empty'
+          target: 'web'
+        ignores: [
+          /bin\/coffee/
+        ]
       build:
         files:
           'browser/noflo-github.js': ['component.json']
