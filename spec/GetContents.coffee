@@ -54,7 +54,7 @@ describe 'GetContents component', ->
           packageData = JSON.parse data
         catch e
           return done e
-        chai.expect(packageData.name).to.equal 'create'
+        chai.expect(packageData.name).to.equal '@bergie/create'
         done()
 
       token.send process.env.GITHUB_API_TOKEN
