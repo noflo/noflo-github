@@ -21,7 +21,7 @@ module.exports = ->
               { test: /\.fbp$/, loader: "fbp-loader" }
             ]
           resolve:
-            extensions: ["", ".coffee", ".js"]
+            extensions: [".coffee", ".js"]
           node:
             net: 'empty'
             tls: 'empty'
