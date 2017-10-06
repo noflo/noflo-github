@@ -71,36 +71,42 @@ describe 'CreateOrphanBranch component', ->
 
   describe 'creating a branch to a newly-initialized repo', ->
     api = null
+    repoName = null
     before (done) ->
       return @skip() unless process?.env?.GITHUB_API_TOKEN
       @timeout 4000
-      api = c.getOcto().api()
-      api.token process.env.GITHUB_API_TOKEN
-      request = api.post "/orgs/the-domains/repos",
-        name: "example.com"
+
+      prefix = Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 5)
+      repoName = "#{prefix}.example.com"
+
+      api = c.getApi()
+      api.authenticate
+        type: 'token'
+        token: process.env.GITHUB_API_TOKEN
+      api.repos.createForOrg
+        org: 'the-domains'
+        name: repoName
         private: false
         has_issues: false
         has_wiki: false
         has_downloads: false
         auto_init: true
-      request.on 'success', (res) ->
+      , (err) ->
+        return done err if err
         setTimeout ->
           done()
         , 1000
-      request.on 'error', (err) ->
-        done new Error err.body.message
-      do request
       return
     after (done) ->
       return @skip() unless process?.env?.GITHUB_API_TOKEN
       @timeout 4000
-      request = api.del "/repos/the-domains/example.com"
-      request.on 'success', ->
+      api.repos.delete
+        owner: 'the-domains'
+        repo: repoName
+      , (err) ->
+        return done err if err
+        api = null
         done()
-      request.on 'error', (err) ->
-        done new Error err.body.message
-      do request
-      api = null
       return
     it 'should succeed', (done) ->
       @timeout 10000
@@ -109,5 +115,5 @@ describe 'CreateOrphanBranch component', ->
         chai.expect(data).to.equal 'grid-pages'
         done()
       token.send process.env.GITHUB_API_TOKEN
-      repo.send 'the-domains/example.com'
+      repo.send "the-domains/#{repoName}"
       branch.send 'grid-pages'

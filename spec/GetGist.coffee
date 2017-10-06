@@ -36,8 +36,6 @@ describe 'GetGist component', ->
     err = null
 
   describe 'reading a valid gist without token', ->
-    before ->
-      return @skip() unless process?.env?.GITHUB_API_TOKEN
     it 'should succeed', (done) ->
       err.on 'data', done
       out.on 'data', (data) ->
@@ -49,7 +47,6 @@ describe 'GetGist component', ->
     before ->
       return @skip() unless process?.env?.GITHUB_API_TOKEN
     it 'should succeed', (done) ->
-      return @skip() unless process?.env?.GITHUB_API_TOKEN
       err.on 'data', done
       out.on 'data', (data) ->
         chai.expect(data).to.be.an 'object'

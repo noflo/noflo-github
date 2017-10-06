@@ -15,10 +15,10 @@
     "node": ">=0.6.0"
   },
   "dependencies": {
-    "noflo": "0.x >= 0.5",
-    "octo": "git://github.com/bergie/octo.git#patched",
     "atob": "~2.0.3",
-    "btoa": "~1.1.2"
+    "btoa": "~1.1.2",
+    "github": "^7.0.1",
+    "noflo": "0.x >= 0.5"
   },
   "devDependencies": {
     "chai": "^4.0.0",

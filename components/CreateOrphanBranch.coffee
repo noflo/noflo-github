@@ -1,5 +1,5 @@
 noflo = require 'noflo'
-octo = require 'octo'
+github = require 'github'
 
 exports.getComponent = ->
   c = new noflo.Component
@@ -21,7 +21,7 @@ exports.getComponent = ->
   c.outPorts.add 'error',
     datatype: 'object'
 
-  c.getOcto = -> octo
+  c.getApi = -> new github
 
   noflo.helpers.WirePattern c,
     in: ['branch', 'repository']
@@ -30,45 +30,54 @@ exports.getComponent = ->
     async: true
     forwardGroups: true
   , (data, groups, out, callback) ->
-    api = octo.api()
-    api.token c.params.token if c.params.token
+    api = new github
+    unless c.params.token
+      return callback new Error 'token required'
+    api.authenticate
+      type: 'token'
+      token: c.params.token
 
+    [org, repoName] = data.repository.split '/'
     # First check if the branch already exists
-    branchReq = api.get "/repos/#{data.repository}/branches/#{data.branch}"
-    branchReq.on 'success', (branchRes) ->
-      out.send data.branch
-      callback()
-    branchReq.on 'error', ->
+    api.repos.getBranch
+      owner: org
+      repo: repoName
+      branch: data.branch
+    , (err) ->
+      unless err
+        out.send data.branch
+        do callback
+        return
       # Missing branch, we need to create an empty commit, and then a reference to it
-      treeReq = api.post "/repos/#{data.repository}/git/trees",
+      api.gitdata.createTree
+        owner: org
+        repo: repoName
         tree: [
           path: 'README.md'
           content: data.branch
           mode: '100644'
           type: 'blob'
         ]
-      treeReq.on 'success', (treeRes) ->
-        return callback new Error 'No SHA' unless treeRes.body.sha
+      , (err, tree) ->
+        return callback err if err
+        return callback new Error 'No SHA' unless tree.sha
 
-        commitReq = api.post "/repos/#{data.repository}/git/commits",
+        api.gitdata.createCommit
+          owner: org
+          repo: repoName
           message: 'Initial'
-          tree: treeRes.body.sha
+          tree: tree.sha
           parents: []
-        commitReq.on 'success', (commitRes) ->
-          refReq = api.post "/repos/#{data.repository}/git/refs",
+        , (err, commit) ->
+          return callback err if err
+          return callback new Error 'No commit SHA' unless commit.sha
+
+          api.gitdata.createReference
+            owner: org
+            repo: repoName
             ref: "refs/heads/#{data.branch}"
-            sha: commitRes.body.sha
-          refReq.on 'success', (refRes) ->
+            sha: commit.sha
+          , (err) ->
+            return callback err if err
             out.send data.branch
             callback()
-          refReq.on 'error', (error) ->
-            callback error.error or error.body
-          do refReq
-
-        commitReq.on 'error', (error) ->
-          callback error.error or error.body
-        do commitReq
-      treeReq.on 'error', (error) ->
-        callback error.error or error.body
-      do treeReq
-    do branchReq

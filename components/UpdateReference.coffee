@@ -1,5 +1,5 @@
 noflo = require 'noflo'
-octo = require 'octo'
+github = require 'github'
 
 exports.getComponent = ->
   c = new noflo.Component
@@ -31,18 +31,25 @@ exports.getComponent = ->
     async: true
     forwardGroups: true
   , (data, groups, out, callback) ->
-    api = octo.api()
-    api.token c.params.token if c.params.token
+    api = new github
+    unless c.params.token
+      return callback new Error 'token required'
+    api.authenticate
+      type: 'token'
+      token: c.params.token
+
     ref = c.params?.reference or 'heads/master'
     force = String(c.params?.force) is 'true'
     ref = ref.substr 5 if ref.substr(0, 5) is 'refs/'
 
-    req = api.patch "/repos/#{data.repository}/git/refs/#{ref}",
+    [org, repoName] = data.repository.split '/'
+    api.gitdata.updateReference
+      owner: org
+      repo: repoName
+      ref: ref
       sha: data.commit
       force: false
-    req.on 'success', (res) ->
+    , (err, res) ->
+      return callback err if err
       out.send res.body
       do callback
-    req.on 'error', (err) ->
-      callback err.error or err.body
-    do req
