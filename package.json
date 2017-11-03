@@ -12,50 +12,27 @@
     "url": "https://github.com/noflo/noflo-github.git"
   },
   "engines": {
-    "node": ">=0.6.0"
+    "node": ">=6"
   },
   "dependencies": {
-    "noflo": "0.x >= 0.5",
+    "noflo": "^1.0.0",
     "octo": "git://github.com/bergie/octo.git#patched",
     "atob": "~2.0.3",
     "btoa": "~1.1.2"
   },
   "devDependencies": {
     "chai": "^4.0.0",
-    "coffee-loader": "^0.7.2",
-    "coffee-script": "^1.12.1",
-    "fbp-loader": "^0.1.1",
     "grunt": "^1.0.1",
     "grunt-coffeelint": "^0.0.16",
-    "grunt-contrib-coffee": "^1.0.0",
+    "grunt-contrib-coffee": "^2.0.0",
     "grunt-contrib-connect": "^1.0.2",
     "grunt-mocha-phantomjs": "^4.0.0",
     "grunt-mocha-test": "^0.13.2",
-    "grunt-noflo-browser": "^1.4.1",
-    "grunt-noflo-manifest": "^0.1.12",
-    "json-loader": "^0.5.4",
+    "grunt-noflo-browser": "^1.5.0",
     "mocha": "^4.0.0"
   },
   "noflo": {
-    "icon": "github",
-    "components": {
-      "CreateBlob": "components/CreateBlob.coffee",
-      "CreateCommit": "components/CreateCommit.coffee",
-      "CreateOrgRepository": "components/CreateOrgRepository.coffee",
-      "CreateOrphanBranch": "components/CreateOrphanBranch.coffee",
-      "CreateRepository": "components/CreateRepository.coffee",
-      "CreateTree": "components/CreateTree.coffee",
-      "GetBlob": "components/GetBlob.coffee",
-      "GetContents": "components/GetContents.coffee",
-      "GetCurrentUser": "components/GetCurrentUser.coffee",
-      "GetGist": "components/GetGist.coffee",
-      "GetReference": "components/GetReference.coffee",
-      "GetRepository": "components/GetRepository.coffee",
-      "GetStargazers": "components/GetStargazers.coffee",
-      "GetUser": "components/GetUser.coffee",
-      "SetContents": "components/SetContents.coffee",
-      "UpdateReference": "components/UpdateReference.coffee"
-    }
+    "icon": "github"
   },
   "scripts": {
     "test": "grunt test"
