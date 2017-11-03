@@ -12,10 +12,10 @@
     "url": "https://github.com/noflo/noflo-github.git"
   },
   "engines": {
-    "node": ">=0.6.0"
+    "node": ">=6"
   },
   "dependencies": {
-    "noflo": "1.0.0",
+    "noflo": "^1.0.0",
     "octo": "git://github.com/bergie/octo.git#patched",
     "atob": "~2.0.3",
     "btoa": "~1.1.2"
