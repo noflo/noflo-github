@@ -8,7 +8,7 @@ else
 
 exports.getComponent = ->
   c = new noflo.Component
-  c.ref = 'master'
+  c.params.ref = 'master'
   c.description = 'Get contents of a file or a directory'
   c.sendRepo = true
   c.inPorts.add 'repository',
@@ -22,8 +22,6 @@ exports.getComponent = ->
   c.inPorts.add 'ref',
     datatype: 'string'
     description: 'The name of the commit/branch/tag'
-    process: (event, payload) ->
-      c.ref = payload if event is 'data'
     required: true
   c.inPorts.add 'token',
     datatype: 'string'
@@ -33,9 +31,6 @@ exports.getComponent = ->
     datatype: 'boolean'
     description: 'Whether to send repository path as group'
     default: true
-    process: (event, payload) ->
-      return unless event is 'data'
-      c.sendRepo = String(payload) is 'true'
   c.outPorts.add 'out',
     datatype: 'string'
   c.outPorts.add 'files',
@@ -47,25 +42,26 @@ exports.getComponent = ->
 
   noflo.helpers.WirePattern c,
     in: ['repository', 'path']
-    params: ['token']
+    params: ['token', 'sendrepo', 'ref']
     out: 'out'
     async: true
     forwardGroups: true
   , (data, groups, out, callback) ->
     api = octo.api()
     api.token c.params.token if c.params.token
+    sendRepo = c.params.sendrepo or false
 
-    request = api.get "/repos/#{data.repository}/contents/#{data.path}?ref=#{c.ref}"
+    request = api.get "/repos/#{data.repository}/contents/#{data.path}?ref=#{c.params.ref}"
     request.on 'success', (res) ->
       unless res.body.content
         unless toString.call(res.body) is '[object Array]'
           callback new Error 'content not found'
           return
         # Directory, send file paths
-        c.outPorts.files.beginGroup data.repository if c.sendRepo
+        c.outPorts.files.beginGroup data.repository if sendRepo
         for file in res.body
           c.outPorts.files.send file
-        c.outPorts.files.endGroup() if c.sendRepo
+        c.outPorts.files.endGroup() if sendRepo
         c.outPorts.files.disconnect()
         do callback
         return
