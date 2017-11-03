@@ -11,6 +11,7 @@ describe 'GetContents component', ->
   c = null
   repo = null
   path = null
+  ref = null
   token = null
   out = null
   files = null
@@ -26,6 +27,8 @@ describe 'GetContents component', ->
       c.inPorts.path.attach path
       repo = noflo.internalSocket.createSocket()
       c.inPorts.repository.attach repo
+      ref = noflo.internalSocket.createSocket()
+      c.inPorts.ref.attach ref
       token = noflo.internalSocket.createSocket()
       c.inPorts.token.attach token
       done()
@@ -60,6 +63,7 @@ describe 'GetContents component', ->
         done()
 
       token.send process.env.GITHUB_API_TOKEN
+      ref.send 'master'
       repo.send 'bergie/create'
       path.send 'package.json'
 
@@ -78,6 +82,7 @@ describe 'GetContents component', ->
         done()
 
       token.send process.env.GITHUB_API_TOKEN
+      ref.send 'master'
       repo.send 'bergie/create'
       path.send 'locale'
 
@@ -94,5 +99,6 @@ describe 'GetContents component', ->
         done()
 
       token.send process.env.GITHUB_API_TOKEN
+      ref.send 'master'
       repo.send 'bergie/create'
       path.send 'xyz123456.json'

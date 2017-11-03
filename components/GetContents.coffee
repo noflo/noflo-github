@@ -31,6 +31,7 @@ exports.getComponent = ->
     datatype: 'boolean'
     description: 'Whether to send repository path as group'
     default: true
+    required: false
   c.outPorts.add 'out',
     datatype: 'string'
   c.outPorts.add 'files',
