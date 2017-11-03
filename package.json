@@ -33,25 +33,7 @@
     "mocha": "^4.0.0"
   },
   "noflo": {
-    "icon": "github",
-    "components": {
-      "CreateBlob": "components/CreateBlob.coffee",
-      "CreateCommit": "components/CreateCommit.coffee",
-      "CreateOrgRepository": "components/CreateOrgRepository.coffee",
-      "CreateOrphanBranch": "components/CreateOrphanBranch.coffee",
-      "CreateRepository": "components/CreateRepository.coffee",
-      "CreateTree": "components/CreateTree.coffee",
-      "GetBlob": "components/GetBlob.coffee",
-      "GetContents": "components/GetContents.coffee",
-      "GetCurrentUser": "components/GetCurrentUser.coffee",
-      "GetGist": "components/GetGist.coffee",
-      "GetReference": "components/GetReference.coffee",
-      "GetRepository": "components/GetRepository.coffee",
-      "GetStargazers": "components/GetStargazers.coffee",
-      "GetUser": "components/GetUser.coffee",
-      "SetContents": "components/SetContents.coffee",
-      "UpdateReference": "components/UpdateReference.coffee"
-    }
+    "icon": "github"
   },
   "scripts": {
     "test": "grunt test"
