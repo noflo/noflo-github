@@ -8,7 +8,6 @@ else
 
 exports.getComponent = ->
   c = new noflo.Component
-  c.params.ref = 'master'
   c.description = 'Get contents of a file or a directory'
   c.sendRepo = true
   c.inPorts.add 'repository',
@@ -23,6 +22,7 @@ exports.getComponent = ->
     datatype: 'string'
     description: 'The name of the commit/branch/tag'
     required: true
+    default: 'master'
   c.inPorts.add 'token',
     datatype: 'string'
     description: 'GitHub API token'
