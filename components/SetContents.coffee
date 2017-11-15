@@ -35,6 +35,7 @@ exports.getComponent = ->
     datatype: 'string'
     description: 'GitHub API token'
     required: true
+    scoped: false
   c.inPorts.add 'sendrepo',
     datatype: 'boolean'
     description: 'Whether to send repository path as group'

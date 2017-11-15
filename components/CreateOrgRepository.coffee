@@ -13,6 +13,7 @@ exports.getComponent = ->
   c.inPorts.add 'token',
     datatype: 'string'
     description: 'GitHub API token'
+    scoped: false
   c.outPorts.add 'out',
     datatype: 'object'
   c.outPorts.add 'error',

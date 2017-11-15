@@ -17,6 +17,7 @@ exports.getComponent = ->
     datatype: 'string'
     description: 'GitHub API token'
     required: true
+    scoped: false
   c.outPorts.add 'out',
     datatype: 'object'
   c.outPorts.add 'error',

@@ -9,6 +9,7 @@ exports.getComponent = ->
   c.inPorts.add 'token',
     datatype: 'string'
     required: true
+    scoped: false
   c.outPorts.add 'out',
     datatype: 'object'
   c.outPorts.add 'error',

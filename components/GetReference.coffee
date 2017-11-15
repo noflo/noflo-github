@@ -8,6 +8,7 @@ exports.getComponent = ->
   c.inPorts.add 'token',
     datatype: 'string'
     required: true
+    scoped: false
   c.inPorts.add 'reference',
     datatype: 'string'
     default: 'heads/master'

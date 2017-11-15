@@ -5,6 +5,7 @@ exports.getComponent = ->
   c = new noflo.Component
   c.inPorts.add 'token',
     datatype: 'string'
+    scoped: false
   c.outPorts.add 'out',
     datatype: 'object'
   c.outPorts.add 'error',
