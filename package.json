@@ -18,7 +18,7 @@
     "noflo": "^1.0.0",
     "octo": "git://github.com/bergie/octo.git#patched",
     "atob": "~2.1.0",
-    "btoa": "~1.1.2"
+    "btoa": "~1.2.1"
   },
   "devDependencies": {
     "chai": "^4.0.0",
